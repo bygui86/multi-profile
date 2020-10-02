@@ -1,0 +1,58 @@
+
+###################### General ##################
+
+# -
+
+
+
+###################### OS generated #############
+
+########### Mac OS X
+*~
+._*
+__MACOSX
+.DS_Store
+.DS_Store?
+.Spotlight-V100
+.Trashes
+### jenv
+.java-version
+
+########### Windows
+Desktop.ini
+ehthumbs.db
+Thumbs.db
+
+########### Linux
+# -
+
+
+
+###################### IDE configurations #######
+
+########### Visual Studio Code
+.vscode
+*.code-workspace
+
+########### JetBrains
+.idea
+
+
+
+###################### GoLang ###################
+
+########### Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+########### Test binaries
+*.test
+
+########### Go coverage tool output
+*.out
+
+########### Project specific
+# -
