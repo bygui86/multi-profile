@@ -248,8 +248,12 @@ func (p *Profile) Stop() {
 		// profiling already stopped
 		return
 	}
-	p.closer()
-	p.closerHook()
+	if p.closer != nil {
+		p.closer()
+	}
+	if p.closerHook != nil {
+		p.closerHook()
+	}
 }
 
 // preparePath prepares the file path to flush data into when profiling will be stopped.
