@@ -260,7 +260,7 @@ func (p *Profile) preparePath() {
 	}
 	p.path, pathErr = ioutil.TempDir("", "profile")
 	if pathErr != nil {
-		log.Fatalf("[profile] profiling start aborted, could not create initial output directory: %s", pathErr.Error())
+		log.Fatalf("profiling start aborted, could not create initial output directory: %s", pathErr.Error())
 	}
 }
 
@@ -269,12 +269,12 @@ func (p *Profile) startCpuMode() {
 	p.filename = filepath.Join(p.path, cpuPprofDefaultFilename)
 	file, fileErr := os.Create(p.filename)
 	if fileErr != nil {
-		log.Fatalf("[profile] could not create cpu profile %q: %s", p.filename, fileErr.Error())
+		log.Fatalf("could not create cpu profile %q: %s", p.filename, fileErr.Error())
 	}
-	p.logger("[profile] cpu profiling enabled (%q)", p.filename)
+	p.logger("cpu profiling enabled (%q)", p.filename)
 	startErr := pprof.StartCPUProfile(file)
 	if startErr != nil {
-		p.logger("[profile] cpu profiling start failed: %s", startErr.Error())
+		p.logger("cpu profiling start failed: %s", startErr.Error())
 	}
 	p.closer = p.stopAndFlush(file, -1)
 }
@@ -284,11 +284,11 @@ func (p *Profile) startMemMode() {
 	p.filename = filepath.Join(p.path, memPprofDefaultFilename)
 	file, err := os.Create(p.filename)
 	if err != nil {
-		log.Fatalf("[profile] could not create memory profile %q: %s", p.filename, err.Error())
+		log.Fatalf("could not create memory profile %q: %s", p.filename, err.Error())
 	}
 	previous := runtime.MemProfileRate
 	runtime.MemProfileRate = p.memProfileRate
-	p.logger("[profile] memory profiling enabled at rate %d (%q)", runtime.MemProfileRate, p.filename)
+	p.logger("memory profiling enabled at rate %d (%q)", runtime.MemProfileRate, p.filename)
 	p.closer = p.stopAndFlush(file, previous)
 }
 
@@ -297,10 +297,10 @@ func (p *Profile) startMutexMode() {
 	p.filename = filepath.Join(p.path, mutexPprofDefaultFilename)
 	file, err := os.Create(p.filename)
 	if err != nil {
-		log.Fatalf("[profile] could not create mutex profile %q: %s", p.filename, err.Error())
+		log.Fatalf("could not create mutex profile %q: %s", p.filename, err.Error())
 	}
 	runtime.SetMutexProfileFraction(1)
-	p.logger("[profile] mutex profiling enabled (%q)", p.filename)
+	p.logger("mutex profiling enabled (%q)", p.filename)
 	p.closer = p.stopAndFlush(file, -1)
 }
 
@@ -309,10 +309,10 @@ func (p *Profile) startBlockMode() {
 	p.filename = filepath.Join(p.path, blockPprofDefaultFilename)
 	file, err := os.Create(p.filename)
 	if err != nil {
-		log.Fatalf("[profile] could not create block profile %q: %s", p.filename, err.Error())
+		log.Fatalf("could not create block profile %q: %s", p.filename, err.Error())
 	}
 	runtime.SetBlockProfileRate(1)
-	p.logger("[profile] block profiling enabled (%q)", p.filename)
+	p.logger("block profiling enabled (%q)", p.filename)
 	p.closer = p.stopAndFlush(file, -1)
 }
 
@@ -321,13 +321,13 @@ func (p *Profile) startTraceMode() {
 	p.filename = filepath.Join(p.path, tracePprofDefaultFilename)
 	file, fileErr := os.Create(p.filename)
 	if fileErr != nil {
-		log.Fatalf("[profile] could not create trace output file %q: %s", p.filename, fileErr.Error())
+		log.Fatalf("could not create trace output file %q: %s", p.filename, fileErr.Error())
 	}
 	startErr := trace.Start(file)
 	if startErr != nil {
-		log.Fatalf("[profile] could not start trace: %s", startErr.Error())
+		log.Fatalf("could not start trace: %s", startErr.Error())
 	}
-	p.logger("[profile] trace enabled (%q)", p.filename)
+	p.logger("trace enabled (%q)", p.filename)
 	p.closer = p.stopAndFlush(file, -1)
 }
 
@@ -336,9 +336,9 @@ func (p *Profile) startThreadCreationMode() {
 	p.filename = filepath.Join(p.path, threadPprofDefaultFilename)
 	file, err := os.Create(p.filename)
 	if err != nil {
-		log.Fatalf("[profile] could not create thread creation profile %q: %s", p.filename, err.Error())
+		log.Fatalf("could not create thread creation profile %q: %s", p.filename, err.Error())
 	}
-	p.logger("[profile] thread creation profiling enabled (%q)", p.filename)
+	p.logger("thread creation profiling enabled (%q)", p.filename)
 	p.closer = p.stopAndFlush(file, -1)
 }
 
@@ -347,9 +347,9 @@ func (p *Profile) startGoroutineMode() {
 	p.filename = filepath.Join(p.path, goroutingPprofDefaultFilename)
 	file, err := os.Create(p.filename)
 	if err != nil {
-		log.Fatalf("[profile] could not create goroutine profile %q: %s", p.filename, err.Error())
+		log.Fatalf("could not create goroutine profile %q: %s", p.filename, err.Error())
 	}
-	p.logger("[profile] goroutine profiling enabled (%q)", p.filename)
+	p.logger("goroutine profiling enabled (%q)", p.filename)
 	p.closer = p.stopAndFlush(file, -1)
 }
 
@@ -362,9 +362,9 @@ func (p *Profile) stopAndFlush(file *os.File, previousMemRate int) func() {
 			pprof.StopCPUProfile()
 			err := file.Close()
 			if err != nil {
-				p.logger("[profile] cpu profiling error flushing data to file %q: %s", p.filename, err.Error())
+				p.logger("cpu profiling error flushing data to file %q: %s", p.filename, err.Error())
 			}
-			p.logger("[profile] cpu profiling disabled (%q)", p.filename)
+			p.logger("cpu profiling disabled (%q)", p.filename)
 		}
 
 	case memMode:
@@ -373,17 +373,17 @@ func (p *Profile) stopAndFlush(file *os.File, previousMemRate int) func() {
 			if pprofile != nil {
 				err := pprofile.WriteTo(file, 0)
 				if err != nil {
-					p.logger("[profile] memory profiling error flushing data to file %q: %s", p.filename, err.Error())
+					p.logger("memory profiling error flushing data to file %q: %s", p.filename, err.Error())
 				}
 			} else {
-				p.logger("[profile] memory profiling error flushing data to file %q: pprof lookup returned null", p.filename)
+				p.logger("memory profiling error flushing data to file %q: pprof lookup returned null", p.filename)
 			}
 			err := file.Close()
 			if err != nil {
-				p.logger("[profile] memory profiling error flushing data to file %q: %s", p.filename, err.Error())
+				p.logger("memory profiling error flushing data to file %q: %s", p.filename, err.Error())
 			}
 			runtime.MemProfileRate = previousMemRate
-			p.logger("[profile] memory profiling disabled (%q)", p.filename)
+			p.logger("memory profiling disabled (%q)", p.filename)
 		}
 
 	case mutexMode:
@@ -392,17 +392,17 @@ func (p *Profile) stopAndFlush(file *os.File, previousMemRate int) func() {
 			if pprofile != nil {
 				err := pprofile.WriteTo(file, 0)
 				if err != nil {
-					p.logger("[profile] mutex profiling error flushing data to file %q: %s", p.filename, err.Error())
+					p.logger("mutex profiling error flushing data to file %q: %s", p.filename, err.Error())
 				}
 			} else {
-				p.logger("[profile] mutex profiling error flushing data to file %q: pprof lookup returned null", p.filename)
+				p.logger("mutex profiling error flushing data to file %q: pprof lookup returned null", p.filename)
 			}
 			err := file.Close()
 			if err != nil {
-				p.logger("[profile] mutex profiling error flushing data to file %q: %s", p.filename, err.Error())
+				p.logger("mutex profiling error flushing data to file %q: %s", p.filename, err.Error())
 			}
 			runtime.SetMutexProfileFraction(0)
-			p.logger("[profile] mutex profiling disabled (%q)", p.filename)
+			p.logger("mutex profiling disabled (%q)", p.filename)
 		}
 
 	case blockMode:
@@ -411,23 +411,23 @@ func (p *Profile) stopAndFlush(file *os.File, previousMemRate int) func() {
 			if pprofile != nil {
 				err := pprofile.WriteTo(file, 0)
 				if err != nil {
-					p.logger("[profile] block profiling error flushing data to file %q: %s", p.filename, err.Error())
+					p.logger("block profiling error flushing data to file %q: %s", p.filename, err.Error())
 				}
 			} else {
-				p.logger("[profile] block profiling error flushing data to file %q: pprof lookup returned null", p.filename)
+				p.logger("block profiling error flushing data to file %q: pprof lookup returned null", p.filename)
 			}
 			err := file.Close()
 			if err != nil {
-				p.logger("[profile] block profiling error flushing data to file %q: %s", p.filename, err.Error())
+				p.logger("block profiling error flushing data to file %q: %s", p.filename, err.Error())
 			}
 			runtime.SetBlockProfileRate(0)
-			p.logger("[profile] block profiling disabled (%q)", p.filename)
+			p.logger("block profiling disabled (%q)", p.filename)
 		}
 
 	case traceMode:
 		return func() {
 			trace.Stop()
-			p.logger("[profile] trace disabled (%q)", p.filename)
+			p.logger("trace disabled (%q)", p.filename)
 		}
 
 	case threadCreationMode:
@@ -436,16 +436,16 @@ func (p *Profile) stopAndFlush(file *os.File, previousMemRate int) func() {
 			if pprofile != nil {
 				err := pprofile.WriteTo(file, 0)
 				if err != nil {
-					p.logger("[profile] thread profiling error flushing data to file %q: %s", p.filename, err.Error())
+					p.logger("thread profiling error flushing data to file %q: %s", p.filename, err.Error())
 				}
 			} else {
-				p.logger("[profile] thread profiling error flushing data to file %q: pprof lookup returned null", p.filename)
+				p.logger("thread profiling error flushing data to file %q: pprof lookup returned null", p.filename)
 			}
 			err := file.Close()
 			if err != nil {
-				p.logger("[profile] thread profiling error flushing data to file %q: %s", p.filename, err.Error())
+				p.logger("thread profiling error flushing data to file %q: %s", p.filename, err.Error())
 			}
-			p.logger("[profile] thread creation profiling disabled (%q)", p.filename)
+			p.logger("thread creation profiling disabled (%q)", p.filename)
 		}
 
 	case goroutineMode:
@@ -454,22 +454,22 @@ func (p *Profile) stopAndFlush(file *os.File, previousMemRate int) func() {
 			if pprofile != nil {
 				err := pprofile.WriteTo(file, 0)
 				if err != nil {
-					p.logger("[profile] goroutine profiling error flushing data to file %q: %s", p.filename, err.Error())
+					p.logger("goroutine profiling error flushing data to file %q: %s", p.filename, err.Error())
 				}
 			} else {
-				p.logger("[profile] goroutine profiling error flushing data to file %q: pprof lookup returned null", p.filename)
+				p.logger("goroutine profiling error flushing data to file %q: pprof lookup returned null", p.filename)
 			}
 			err := file.Close()
 			if err != nil {
-				p.logger("[profile] goroutine profiling error flushing data to file %q: %s", p.filename, err.Error())
+				p.logger("goroutine profiling error flushing data to file %q: %s", p.filename, err.Error())
 			}
-			p.logger("[profile] goroutine profiling disabled (%q)", p.filename)
+			p.logger("goroutine profiling disabled (%q)", p.filename)
 		}
 
 	// WARN: we should never reach default!
 	default:
 		return func() {
-			p.logger("[profile] unknown profiling disabled (%q)", p.filename)
+			p.logger("unknown profiling disabled (%q)", p.filename)
 		}
 	}
 }
@@ -482,7 +482,7 @@ func (p *Profile) startShutdownHook() {
 			signal.Notify(syscallCh, syscall.SIGTERM, syscall.SIGINT, os.Interrupt)
 			<-syscallCh
 
-			log.Println("[profile] caught interrupt, stop profiling")
+			log.Println("caught interrupt, stop profiling")
 			p.Stop()
 
 			os.Exit(0)
