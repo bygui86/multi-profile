@@ -333,6 +333,7 @@ func (p *Profile) startCpuMode() {
 		p.log("[FATAL] CPU profiling file %q creation failed: %s", p.filename, fileErr.Error())
 		os.Exit(12)
 	}
+
 	startErr := pprof.StartCPUProfile(file)
 	if startErr != nil {
 		// TODO replace with specific logger method
@@ -340,6 +341,7 @@ func (p *Profile) startCpuMode() {
 		os.Exit(13)
 	}
 	p.internalCloser = p.stopAndFlush(file, -1)
+
 	// TODO replace with specific logger method
 	p.log("[INFO] CPU profiling enabled, file %s", fmt.Sprintf("%s%s", p.path, p.filename))
 }
@@ -350,15 +352,17 @@ func (p *Profile) startMemMode() {
 	file, err := os.Create(p.filename)
 	if err != nil {
 		// TODO replace with specific logger method
-		p.log("[FATAL] Memory profiling file %q creation failed: %s", p.filename, err.Error())
+		p.log("[FATAL] Memory profiling (%s) file %q creation failed: %s", p.memProfileType, p.filename, err.Error())
 		os.Exit(12)
 	}
+
 	previous := runtime.MemProfileRate
 	runtime.MemProfileRate = p.memProfileRate
 	p.internalCloser = p.stopAndFlush(file, previous)
+
 	// TODO replace with specific logger method
-	p.log("[INFO] Memory profiling enabled at rate %d, file %s",
-		runtime.MemProfileRate, fmt.Sprintf("%s%s", p.path, p.filename))
+	p.log("[INFO] Memory profiling (%s) enabled at rate %d, file %s",
+		p.memProfileType, runtime.MemProfileRate, fmt.Sprintf("%s%s", p.path, p.filename))
 }
 
 // startMutexMode starts mutes profiling
@@ -370,8 +374,10 @@ func (p *Profile) startMutexMode() {
 		p.log("[FATAL] Mutex profiling file %q creation failed: %s", p.filename, err.Error())
 		os.Exit(12)
 	}
+
 	runtime.SetMutexProfileFraction(1)
 	p.internalCloser = p.stopAndFlush(file, -1)
+
 	// TODO replace with specific logger method
 	p.log("[INFO] Mutex profiling enabled, file %s", fmt.Sprintf("%s%s", p.path, p.filename))
 }
@@ -385,8 +391,10 @@ func (p *Profile) startBlockMode() {
 		p.log("[FATAL] Block profiling file %q creation failed: %s", p.filename, err.Error())
 		os.Exit(12)
 	}
+
 	runtime.SetBlockProfileRate(1)
 	p.internalCloser = p.stopAndFlush(file, -1)
+
 	// TODO replace with specific logger method
 	p.log("[INFO] Block profiling enabled, file %s", fmt.Sprintf("%s%s", p.path, p.filename))
 }
@@ -400,6 +408,7 @@ func (p *Profile) startTraceMode() {
 		p.log("[FATAL] Trace profiling file %q creation failed: %s", p.filename, fileErr.Error())
 		os.Exit(12)
 	}
+
 	startErr := trace.Start(file)
 	if startErr != nil {
 		// TODO replace with specific logger method
@@ -407,6 +416,7 @@ func (p *Profile) startTraceMode() {
 		os.Exit(14)
 	}
 	p.internalCloser = p.stopAndFlush(file, -1)
+
 	// TODO replace with specific logger method
 	p.log("[INFO] Trace profiling enabled, file %s", fmt.Sprintf("%s%s", p.path, p.filename))
 }
@@ -421,6 +431,7 @@ func (p *Profile) startThreadCreationMode() {
 		os.Exit(12)
 	}
 	p.internalCloser = p.stopAndFlush(file, -1)
+
 	// TODO replace with specific logger method
 	p.log("[INFO] Thread creation profiling enabled, file %s", fmt.Sprintf("%s%s", p.path, p.filename))
 }
@@ -435,10 +446,12 @@ func (p *Profile) startGoroutineMode() {
 		os.Exit(12)
 	}
 	p.internalCloser = p.stopAndFlush(file, -1)
+
 	// TODO replace with specific logger method
 	p.log("[INFO] Goroutine profiling enabled, file %s", fmt.Sprintf("%s%s", p.path, p.filename))
 }
 
+// TODO replace lambdas with regular functions
 // stopAndFlush stops profiling and flush data to file.
 func (p *Profile) stopAndFlush(file *os.File, previousMemRate int) func() {
 	switch p.mode {
@@ -450,6 +463,7 @@ func (p *Profile) stopAndFlush(file *os.File, previousMemRate int) func() {
 			if err != nil {
 				p.log("cpu profiling error flushing data to file %q: %s", p.filename, err.Error())
 			}
+
 			p.log("cpu profiling disabled (%q)", p.filename)
 		}
 
@@ -464,10 +478,12 @@ func (p *Profile) stopAndFlush(file *os.File, previousMemRate int) func() {
 			} else {
 				p.log("memory profiling error flushing data to file %q: pprof lookup returned null", p.filename)
 			}
+
 			err := file.Close()
 			if err != nil {
 				p.log("memory profiling error flushing data to file %q: %s", p.filename, err.Error())
 			}
+
 			runtime.MemProfileRate = previousMemRate
 			p.log("memory profiling disabled (%q)", p.filename)
 		}
@@ -483,10 +499,12 @@ func (p *Profile) stopAndFlush(file *os.File, previousMemRate int) func() {
 			} else {
 				p.log("mutex profiling error flushing data to file %q: pprof lookup returned null", p.filename)
 			}
+
 			err := file.Close()
 			if err != nil {
 				p.log("mutex profiling error flushing data to file %q: %s", p.filename, err.Error())
 			}
+
 			runtime.SetMutexProfileFraction(0)
 			p.log("mutex profiling disabled (%q)", p.filename)
 		}
@@ -502,10 +520,12 @@ func (p *Profile) stopAndFlush(file *os.File, previousMemRate int) func() {
 			} else {
 				p.log("block profiling error flushing data to file %q: pprof lookup returned null", p.filename)
 			}
+
 			err := file.Close()
 			if err != nil {
 				p.log("block profiling error flushing data to file %q: %s", p.filename, err.Error())
 			}
+
 			runtime.SetBlockProfileRate(0)
 			p.log("block profiling disabled (%q)", p.filename)
 		}
@@ -527,10 +547,12 @@ func (p *Profile) stopAndFlush(file *os.File, previousMemRate int) func() {
 			} else {
 				p.log("thread profiling error flushing data to file %q: pprof lookup returned null", p.filename)
 			}
+
 			err := file.Close()
 			if err != nil {
 				p.log("thread profiling error flushing data to file %q: %s", p.filename, err.Error())
 			}
+
 			p.log("thread creation profiling disabled (%q)", p.filename)
 		}
 
@@ -545,10 +567,12 @@ func (p *Profile) stopAndFlush(file *os.File, previousMemRate int) func() {
 			} else {
 				p.log("goroutine profiling error flushing data to file %q: pprof lookup returned null", p.filename)
 			}
+
 			err := file.Close()
 			if err != nil {
 				p.log("goroutine profiling error flushing data to file %q: %s", p.filename, err.Error())
 			}
+
 			p.log("goroutine profiling disabled (%q)", p.filename)
 		}
 
@@ -579,6 +603,7 @@ func (p *Profile) startShutdownHook() {
 
 func (p *Profile) log(format string, args ...interface{}) {
 	if !p.quiet {
+		// TODO replace it with fmt?
 		log.Printf(format, args...)
 	}
 }
