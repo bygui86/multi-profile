@@ -10,14 +10,14 @@ This project was inspired by [pkg/profile](github.com/pkg/profile) but there is 
 ## TODO list
 
 - [x] ~~align with profile original (last align 1.10.2020)~~
-- [ ] testing
+- [x] ~~testing~~
 - [x] ~~improve os.exit codes~~
+- [ ] more advanced logger (e.g. zap, logrus) through interface
 - [ ] github actions
 - [ ] README - `WIP`
     - [x] ~~complete all sections~~
     - [ ] github actions badge in readme, e.g. [![Build Status](https://travis-ci.org/pkg/profile.svg?branch=master)](https://travis-ci.org/pkg/profile)
     - [ ] godoc badge in readme, e.g. [![GoDoc](http://godoc.org/github.com/pkg/profile?status.svg)](http://godoc.org/github.com/pkg/profile)
-- [ ] logger interface (e.g. zap, logrus)
 
 ## Installation
 
