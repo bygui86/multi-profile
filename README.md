@@ -1,4 +1,7 @@
-# multi-profile - `WIP`
+
+# multi-profile
+
+`⚠️ WARNING` Please notice this package is still under development.
 
 Multi-profiling support package for Go.
 
@@ -6,15 +9,15 @@ This project was inspired by [pkg/profile](github.com/pkg/profile) but there is 
 
 ## TODO list
 
-- [x] align with profile original (last align 1.10.2020)
+- [x] ~~align with profile original (last align 1.10.2020)~~
 - [ ] testing
-    - [ ] profile-test
-    - [ ] multi-test
+- [x] ~~improve os.exit codes~~
 - [ ] github actions
-- [ ] README
+- [ ] README - `WIP`
+    - [x] ~~complete all sections~~
     - [ ] github actions badge in readme, e.g. [![Build Status](https://travis-ci.org/pkg/profile.svg?branch=master)](https://travis-ci.org/pkg/profile)
     - [ ] godoc badge in readme, e.g. [![GoDoc](http://godoc.org/github.com/pkg/profile?status.svg)](http://godoc.org/github.com/pkg/profile)
-- [ ] external logger
+- [ ] logger interface (e.g. zap, logrus)
 
 ## Installation
 
@@ -22,46 +25,73 @@ This project was inspired by [pkg/profile](github.com/pkg/profile) but there is 
 go get github.com/bygui86/multi-profile
 ```
 
-## Usage - `WIP`
+## Usage
 
 Enabling profiling in your application is as simple as one line at the top of your main function.
 
 For example:
 
 ```go
+package main
+
 import "github.com/bygui86/multi-profile"
 
 func main() {
-    defer profile.Start().Stop()
-    ...
+    defer profile.CPUProfile(&profile.ProfileConfig{}).Start().Stop()
+    
+    // ...
 }
 ```
 
-## Options - `WIP`
-
-What to profile is controlled by config value passed to profile.Start. 
-By default CPU profiling is enabled.
+Using profile specific method, you can create the kind of profiling you want giving a ProfileConfig as input. 
 
 ```go
+package main
+
 import "github.com/bygui86/multi-profile"
 
 func main() {
-    // p.Stop() must be called before the program exits to
-    // ensure profiling information is written to disk.
-    p := profile.Start(profile.MemProfile, profile.ProfilePath("."), profile.NoShutdownHook)
-    ...
-    // You can enable different kinds of memory profiling, either Heap or Allocs where Heap
-    // profiling is the default with profile.MemProfile.
-    p := profile.Start(profile.MemProfileAllocs, profile.ProfilePath("."), profile.NoShutdownHook)
+    defer profile.CPUProfile(&profile.ProfileConfig{}).Start().Stop()
+    defer profile.MemProfile(&profile.ProfileConfig{}).Start().Stop()
+    defer profile.GoroutineProfile(&profile.ProfileConfig{}).Start().Stop()
+
+    // ...
 }
 ```
 
-Several convenience package level values are provided for cpu, memory, and block (contention) profiling.
+`ℹ️ INFO` see [examples](examples/profiles.go) folder for all available profiles and samples.
 
-For more complex options, consult the [documentation](http://godoc.org/github.com/bygui86/multi-profile).
+## Options
+
+`ℹ️️ INFO` see [examples](examples/options.go) for all usage samples.
+
+### Path
+
+You can customize the path in which a profile file is going to be written. Use field `Path` and `UseTempPath` in the ProfileConfig.
+
+### Shutdown hook
+
+You can disable the shutdown hook. The shutdown hook controls if profiling package should hook SIGINT to write profiles cleanly. Use `DisableShutdownHook` field in the ProfileConfig.
+
+### Quiet mode
+
+You can suppress all logs. Use field `Quiet` in the ProfileConfig.
+
+### Closer function
+
+You can call a function right after stopping the profiling. Use `CloserHook` field in the ProfileConfig.
+
+## Error codes
+
+| Code | Description |
+| --- | --- |
+| 11 | path preparation failed |
+| 12 | file creation failed |
+| 13 | cpu profile start failed |
+| 14 | trace profile start failed |
 
 ## Contributing
 
 I welcome pull requests, bug fixes and issue reports.
 
-Before proposing a change, please discuss it first by raising an issue.
+To propose an extensive change, please discuss it first by opening an issue.
