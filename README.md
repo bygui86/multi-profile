@@ -2,6 +2,8 @@
 # multi-profile
 
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/bygui86/multi-profile)](https://pkg.go.dev/github.com/bygui86/multi-profile)
+[![BuildStatus](https://github.com/bygui86/multi-profile/workflows/ci-cd/badge.svg)](https://github.com/bygui86/multi-profile/actions)
+
 
 `/!\ WARNING` Please notice this package is still under development.
 
@@ -15,14 +17,14 @@ This project was inspired by [pkg/profile](github.com/pkg/profile) but there is 
 - [x] ~~testing~~
 - [x] ~~improve os.exit codes~~
 - [ ] more advanced logger (e.g. zap, logrus) through interface
-- [ ] github actions - `WIP`
-    - [ ] build stage for all all branches
-    - [ ] test stage for all branches
-    - [ ] `TBD` release stage for tags
+- [x] ~~github actions~~
+    - [ ] ~~build stage for all all branches~~
+    - [ ] ~~test stage for all branches~~
 - [ ] README - `WIP`
     - [x] ~~complete all sections~~
     - [ ] github actions badge in readme, e.g. from pkg/profile [![Build Status](https://travis-ci.org/pkg/profile.svg?branch=master)](https://travis-ci.org/pkg/profile)
     - [x] ~~godoc badge in readme, e.g.~~
+- [ ] create releases automatically
 
 ## Installation
 
