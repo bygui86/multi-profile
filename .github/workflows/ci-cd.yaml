@@ -1,0 +1,41 @@
+on: [push, pull_request]
+name: CI-CD
+env:
+  GO111MODULE: "on"
+jobs:
+  pipeline:
+    name: pipeline
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Build
+        uses: cedrickring/golang-action/go1.15@1.6.0
+        run: go build ./...
+      - name: Test
+        uses: cedrickring/golang-action/go1.15@1.6.0
+        run: go test -count=3 -race ./...
+#---
+#on: [push, pull_request]
+#name: CI CD
+#env:
+#  GO111MODULE: "on"
+#jobs:
+#  pipeline:
+#    name: pipeline
+#    strategy:
+#      matrix:
+#        go-version: [ 1.14.x, 1.15.x ]
+#        os: [ ubuntu-latest, macos-latest, windows-latest ]
+#    runs-on: ${{ matrix.os }}
+#    steps:
+#      - name: Install Go
+#        uses: actions/setup-go@v2
+#        with:
+#          go-version: ${{ matrix.go-version }}
+#      - name: Checkout code
+#        uses: actions/checkout@v2
+#      - name: Build
+#        run: go build ./...
+#      - name: Test
+#        run: go test -count=3 -race ./...
