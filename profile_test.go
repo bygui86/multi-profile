@@ -281,7 +281,7 @@ var optionsTests = []profileTest{
 			`,
 		checks: []checkFn{
 			NoStdout,
-			Stderr("creation failed"),
+			Stderr("permission denied"),
 			Err,
 		},
 	},

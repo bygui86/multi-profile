@@ -1,0 +1,22 @@
+on: [push, pull_request]
+name: ci-cd
+env:
+  GO111MODULE: "on"
+jobs:
+  pipeline:
+    name: pipeline
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.15.x
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Build
+        run: go build ./...
+      - name: Test
+        run: go test -count=3 -race ./...
