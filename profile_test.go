@@ -27,8 +27,8 @@ var profileTests = []profileTest{
 			}
 			`,
 		checks: []checkFn{
-			NoStdout,
-			Stderr("cpu profiling enabled"),
+			Stdout("cpu profiling enabled"),
+			NoStderr,
 			NoErr,
 		},
 	},
@@ -36,16 +36,16 @@ var profileTests = []profileTest{
 		name: "heap memory profile",
 		code: `
 			package main
-			
+	
 			import "github.com/bygui86/multi-profile"
-			
+	
 			func main() {
 				defer profile.MemProfile(&profile.ProfileConfig{}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
-			NoStdout,
-			Stderr("memory profiling (heap) enabled"),
+			Stdout("memory profiling (heap) enabled"),
+			NoStderr,
 			NoErr,
 		},
 	},
@@ -53,16 +53,16 @@ var profileTests = []profileTest{
 		name: "allocs memory profile",
 		code: `
 			package main
-			
+	
 			import "github.com/bygui86/multi-profile"
-			
+	
 			func main() {
 				defer profile.MemProfile(&profile.ProfileConfig{MemProfileType: profile.MemProfileAllocs}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
-			NoStdout,
-			Stderr("memory profiling (allocs) enabled"),
+			Stdout("memory profiling (allocs) enabled"),
+			NoStderr,
 			NoErr,
 		},
 	},
@@ -70,16 +70,16 @@ var profileTests = []profileTest{
 		name: "rate memory profile",
 		code: `
 			package main
-			
+	
 			import "github.com/bygui86/multi-profile"
-			
+	
 			func main() {
 				defer profile.MemProfile(&profile.ProfileConfig{MemProfileRate: 1024}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
-			NoStdout,
-			Stderr("memory profiling (heap) enabled at rate 1024"),
+			Stdout("memory profiling (heap) enabled at rate 1024"),
+			NoStderr,
 			NoErr,
 		},
 	},
@@ -87,16 +87,16 @@ var profileTests = []profileTest{
 		name: "mutex profile",
 		code: `
 			package main
-			
+	
 			import "github.com/bygui86/multi-profile"
-			
+	
 			func main() {
 				defer profile.MutexProfile(&profile.ProfileConfig{}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
-			NoStdout,
-			Stderr("mutex profiling enabled"),
+			Stdout("mutex profiling enabled"),
+			NoStderr,
 			NoErr,
 		},
 	},
@@ -104,16 +104,16 @@ var profileTests = []profileTest{
 		name: "block profile",
 		code: `
 			package main
-			
+	
 			import "github.com/bygui86/multi-profile"
-			
+	
 			func main() {
 				defer profile.BlockProfile(&profile.ProfileConfig{}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
-			NoStdout,
-			Stderr("block profiling enabled"),
+			Stdout("block profiling enabled"),
+			NoStderr,
 			NoErr,
 		},
 	},
@@ -121,16 +121,16 @@ var profileTests = []profileTest{
 		name: "trace profile",
 		code: `
 			package main
-			
+	
 			import "github.com/bygui86/multi-profile"
-			
+	
 			func main() {
 				defer profile.TraceProfile(&profile.ProfileConfig{}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
-			NoStdout,
-			Stderr("trace profiling enabled"),
+			Stdout("trace profiling enabled"),
+			NoStderr,
 			NoErr,
 		},
 	},
@@ -138,16 +138,16 @@ var profileTests = []profileTest{
 		name: "thread creation profile",
 		code: `
 			package main
-			
+	
 			import "github.com/bygui86/multi-profile"
-			
+	
 			func main() {
 				defer profile.ThreadCreationProfile(&profile.ProfileConfig{}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
-			NoStdout,
-			Stderr("thread creation profiling enabled"),
+			Stdout("thread creation profiling enabled"),
+			NoStderr,
 			NoErr,
 		},
 	},
@@ -155,16 +155,16 @@ var profileTests = []profileTest{
 		name: "goroutine profile",
 		code: `
 			package main
-			
+	
 			import "github.com/bygui86/multi-profile"
-			
+	
 			func main() {
 				defer profile.GoroutineProfile(&profile.ProfileConfig{}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
-			NoStdout,
-			Stderr("goroutine profiling enabled"),
+			Stdout("goroutine profiling enabled"),
+			NoStderr,
 			NoErr,
 		},
 	},
@@ -223,8 +223,8 @@ var optionsTests = []profileTest{
 			}
 			`,
 		checks: []checkFn{
-			NoStdout,
-			Stderr(os.Getenv("HOME") + "/cpu.pprof"),
+			Stdout(os.Getenv("HOME") + "/cpu.pprof"),
+			NoStderr,
 			NoErr,
 		},
 	},
@@ -240,8 +240,8 @@ var optionsTests = []profileTest{
 			}
 			`,
 		checks: []checkFn{
-			NoStdout,
-			Stderr("profile_"),
+			Stdout("profile_"),
+			NoStderr,
 			NoErr,
 		},
 	},
@@ -280,8 +280,8 @@ var optionsTests = []profileTest{
 			}
 			`,
 		checks: []checkFn{
-			NoStdout,
-			Stderr("permission denied"),
+			Stdout("permission denied"),
+			Stderr("exit status"),
 			Err,
 		},
 	},
