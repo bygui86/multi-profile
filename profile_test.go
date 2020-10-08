@@ -27,8 +27,8 @@ var profileTests = []profileTest{
 			}
 			`,
 		checks: []checkFn{
-			NoStdout,
-			Stderr("cpu profiling enabled"),
+			Stdout("cpu profiling enabled", "cpu profiling disabled"),
+			NoStderr,
 			NoErr,
 		},
 	},
@@ -36,16 +36,16 @@ var profileTests = []profileTest{
 		name: "heap memory profile",
 		code: `
 			package main
-			
+	
 			import "github.com/bygui86/multi-profile"
-			
+	
 			func main() {
 				defer profile.MemProfile(&profile.ProfileConfig{}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
-			NoStdout,
-			Stderr("memory profiling (heap) enabled"),
+			Stdout("memory profiling (heap) enabled", "memory profiling (heap) disabled"),
+			NoStderr,
 			NoErr,
 		},
 	},
@@ -53,16 +53,16 @@ var profileTests = []profileTest{
 		name: "allocs memory profile",
 		code: `
 			package main
-			
+	
 			import "github.com/bygui86/multi-profile"
-			
+	
 			func main() {
 				defer profile.MemProfile(&profile.ProfileConfig{MemProfileType: profile.MemProfileAllocs}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
-			NoStdout,
-			Stderr("memory profiling (allocs) enabled"),
+			Stdout("memory profiling (allocs) enabled", "memory profiling (allocs) disabled"),
+			NoStderr,
 			NoErr,
 		},
 	},
@@ -70,16 +70,16 @@ var profileTests = []profileTest{
 		name: "rate memory profile",
 		code: `
 			package main
-			
+	
 			import "github.com/bygui86/multi-profile"
-			
+	
 			func main() {
 				defer profile.MemProfile(&profile.ProfileConfig{MemProfileRate: 1024}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
-			NoStdout,
-			Stderr("memory profiling (heap) enabled at rate 1024"),
+			Stdout("memory profiling (heap) enabled at rate 1024", "memory profiling (heap) disabled"),
+			NoStderr,
 			NoErr,
 		},
 	},
@@ -87,16 +87,16 @@ var profileTests = []profileTest{
 		name: "mutex profile",
 		code: `
 			package main
-			
+	
 			import "github.com/bygui86/multi-profile"
-			
+	
 			func main() {
 				defer profile.MutexProfile(&profile.ProfileConfig{}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
-			NoStdout,
-			Stderr("mutex profiling enabled"),
+			Stdout("mutex profiling enabled", "mutex profiling disabled"),
+			NoStderr,
 			NoErr,
 		},
 	},
@@ -104,16 +104,16 @@ var profileTests = []profileTest{
 		name: "block profile",
 		code: `
 			package main
-			
+	
 			import "github.com/bygui86/multi-profile"
-			
+	
 			func main() {
 				defer profile.BlockProfile(&profile.ProfileConfig{}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
-			NoStdout,
-			Stderr("block profiling enabled"),
+			Stdout("block profiling enabled", "block profiling disabled"),
+			NoStderr,
 			NoErr,
 		},
 	},
@@ -121,16 +121,16 @@ var profileTests = []profileTest{
 		name: "trace profile",
 		code: `
 			package main
-			
+	
 			import "github.com/bygui86/multi-profile"
-			
+	
 			func main() {
 				defer profile.TraceProfile(&profile.ProfileConfig{}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
-			NoStdout,
-			Stderr("trace profiling enabled"),
+			Stdout("trace profiling enabled", "trace profiling disabled"),
+			NoStderr,
 			NoErr,
 		},
 	},
@@ -138,16 +138,16 @@ var profileTests = []profileTest{
 		name: "thread creation profile",
 		code: `
 			package main
-			
+	
 			import "github.com/bygui86/multi-profile"
-			
+	
 			func main() {
 				defer profile.ThreadCreationProfile(&profile.ProfileConfig{}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
-			NoStdout,
-			Stderr("thread creation profiling enabled"),
+			Stdout("thread creation profiling enabled", "thread creation profiling disabled"),
+			NoStderr,
 			NoErr,
 		},
 	},
@@ -155,16 +155,34 @@ var profileTests = []profileTest{
 		name: "goroutine profile",
 		code: `
 			package main
-			
+	
 			import "github.com/bygui86/multi-profile"
-			
+	
 			func main() {
 				defer profile.GoroutineProfile(&profile.ProfileConfig{}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
-			NoStdout,
-			Stderr("goroutine profiling enabled"),
+			Stdout("goroutine profiling enabled", "goroutine profiling disabled"),
+			NoStderr,
+			NoErr,
+		},
+	},
+	{
+		name: "multi profile",
+		code: `
+			package main
+			
+			import "github.com/bygui86/multi-profile"
+			
+			func main() {
+				defer profile.CPUProfile(&profile.ProfileConfig{}).Start().Stop()
+				defer profile.MemProfile(&profile.ProfileConfig{}).Start().Stop()
+			}
+			`,
+		checks: []checkFn{
+			Stdout("cpu profiling enabled", "cpu profiling disabled", "memory profiling (heap) enabled", "memory profiling (heap) disabled"),
+			NoStderr,
 			NoErr,
 		},
 	},
@@ -181,12 +199,12 @@ func TestProfiles(t *testing.T) {
 
 	checkPprofFiles(t, []string{
 		"./cpu.pprof", "./mem.pprof", "./mutex.pprof", "./block.pprof",
-		"./trace.pprof", "./threadcreate.pprof", "./goroutine.pprof",
+		"./trace.pprof", "./thread.pprof", "./goroutine.pprof",
 	})
 
 	cleanupPprofFiles(t, []string{
 		"./cpu.pprof", "./mem.pprof", "./mutex.pprof", "./block.pprof",
-		"./trace.pprof", "./threadcreate.pprof", "./goroutine.pprof",
+		"./trace.pprof", "./thread.pprof", "./goroutine.pprof",
 	})
 }
 
@@ -195,9 +213,9 @@ var optionsTests = []profileTest{
 		name: "quiet option",
 		code: `
 			package main
-			
+	
 			import "github.com/bygui86/multi-profile"
-			
+	
 			func main() {
 				defer profile.CPUProfile(&profile.ProfileConfig{Quiet: true}).Start().Stop()
 			}
@@ -212,19 +230,19 @@ var optionsTests = []profileTest{
 		name: "custom path option",
 		code: `
 			package main
-			
+	
 			import (
 				"os"
 				"github.com/bygui86/multi-profile"
 			)
-			
+	
 			func main() {
 				defer profile.CPUProfile(&profile.ProfileConfig{Path: os.Getenv("HOME")}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
-			NoStdout,
-			Stderr(os.Getenv("HOME") + "/cpu.pprof"),
+			Stdout("cpu profiling enabled", "cpu profiling disabled", os.Getenv("HOME")+"/cpu.pprof"),
+			NoStderr,
 			NoErr,
 		},
 	},
@@ -232,16 +250,16 @@ var optionsTests = []profileTest{
 		name: "temp path option",
 		code: `
 			package main
-			
+	
 			import "github.com/bygui86/multi-profile"
-			
+	
 			func main() {
 				defer profile.CPUProfile(&profile.ProfileConfig{UseTempPath: true}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
-			NoStdout,
-			Stderr("profile_"),
+			Stdout("cpu profiling enabled", "cpu profiling disabled", "profile_"),
+			NoStderr,
 			NoErr,
 		},
 	},
@@ -264,7 +282,7 @@ var optionsTests = []profileTest{
 			}
 			`,
 		checks: []checkFn{
-			Stdout("custom closer"),
+			Stdout("cpu profiling enabled", "cpu profiling disabled", "custom closer"),
 			NoErr,
 		},
 	},
@@ -272,16 +290,16 @@ var optionsTests = []profileTest{
 		name: "custom path error",
 		code: `
 			package main
-			
+	
 			import "github.com/bygui86/multi-profile"
-			
+	
 			func main() {
 				defer profile.CPUProfile(&profile.ProfileConfig{Path: "/private"}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
-			NoStdout,
-			Stderr("permission denied"),
+			Stdout("permission denied"),
+			Stderr("exit status"),
 			Err,
 		},
 	},
@@ -325,7 +343,7 @@ func Stdout(lines ...string) checkFn {
 	return func(t *testing.T, stdout, stderr []byte, err error) {
 		r := bytes.NewReader(stdout)
 		if !validateOutput(r, lines) {
-			t.Errorf("stdout: expected '%s', actual '%s'", lines, stdout)
+			t.Errorf("stdout: expected '%s', actual '%s'", strings.Join(lines, ", "), stdout)
 		}
 	}
 }
@@ -342,7 +360,7 @@ func Stderr(lines ...string) checkFn {
 	return func(t *testing.T, stdout, stderr []byte, err error) {
 		r := bytes.NewReader(stderr)
 		if !validateOutput(r, lines) {
-			t.Errorf("stderr: expected '%s', actual '%s'", lines, stderr)
+			t.Errorf("stderr: expected '%s', actual '%s'", strings.Join(lines, ", "), stderr)
 		}
 	}
 }
@@ -363,11 +381,17 @@ func Err(t *testing.T, stdout, stderr []byte, err error) {
 
 // validateOutput validates the given slice of lines against data from the given reader.
 func validateOutput(reader io.Reader, expected []string) bool {
-	s := bufio.NewScanner(reader)
+	scanner := bufio.NewScanner(reader)
 	for _, line := range expected {
-		if !s.Scan() || !strings.Contains(strings.ToLower(s.Text()), strings.ToLower(line)) {
-			return false
+		flag := true
+		for scanner.Scan() {
+			if strings.Contains(strings.ToLower(scanner.Text()), strings.ToLower(line)) {
+				return true
+			} else {
+				flag = false
+			}
 		}
+		return flag
 	}
 	return true
 }
