@@ -181,12 +181,12 @@ func TestProfiles(t *testing.T) {
 
 	checkPprofFiles(t, []string{
 		"./cpu.pprof", "./mem.pprof", "./mutex.pprof", "./block.pprof",
-		"./trace.pprof", "./threadcreate.pprof", "./goroutine.pprof",
+		"./trace.pprof", "./thread.pprof", "./goroutine.pprof",
 	})
 
 	cleanupPprofFiles(t, []string{
 		"./cpu.pprof", "./mem.pprof", "./mutex.pprof", "./block.pprof",
-		"./trace.pprof", "./threadcreate.pprof", "./goroutine.pprof",
+		"./trace.pprof", "./thread.pprof", "./goroutine.pprof",
 	})
 }
 
