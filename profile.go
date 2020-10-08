@@ -42,6 +42,14 @@ const (
 	fatalLevel logLevel = "fatal"
 )
 
+/*
+	TODO
+		. rename 'filename' to 'filepath'
+		. store file (interface or pointer) into profile instead of passing it as method param (see 'start*Mode' function)
+		. store previousMemRate into profile instead of passing it as method param (see 'startMemMode' function)
+		. use 'stop*Mode' function directly instead of returning func()
+*/
+
 // Profile represents a profiling session
 type Profile struct {
 	// mode holds the type of profiling that will be made
@@ -436,37 +444,6 @@ func (p *Profile) startGoroutineMode() {
 	p.logf(infoLevel, "Goroutine profiling enabled, file %s", fmt.Sprintf("%s%s", p.path, p.filename))
 }
 
-// stopAndFlush stops profiling and flush data to file
-func (p *Profile) stopAndFlush(file *os.File, previousMemRate int) func() {
-	switch p.mode {
-
-	case cpuMode:
-		return p.stopCpuMode(file)
-
-	case memMode:
-		return p.stopMemMode(file, previousMemRate)
-
-	case mutexMode:
-		return p.stopMutexMode(file)
-
-	case blockMode:
-		return p.stopBlockMode(file)
-
-	case traceMode:
-		return p.stopTraceMode()
-
-	case threadMode:
-		return p.stopThreadCreationMode(file)
-
-	case goroutineMode:
-		return p.stopGoroutineMode(file)
-
-	// WARN: we should never reach default!
-	default:
-		return p.stopUnknownMode()
-	}
-}
-
 // stopCpuMode stops cpu profiling
 func (p *Profile) stopCpuMode(file *os.File) func() {
 	return func() {
@@ -622,6 +599,37 @@ func (p *Profile) startShutdownHook() {
 
 			os.Exit(0)
 		}()
+	}
+}
+
+// stopAndFlush stops profiling and flush data to file
+func (p *Profile) stopAndFlush(file *os.File, previousMemRate int) func() {
+	switch p.mode {
+
+	case cpuMode:
+		return p.stopCpuMode(file)
+
+	case memMode:
+		return p.stopMemMode(file, previousMemRate)
+
+	case mutexMode:
+		return p.stopMutexMode(file)
+
+	case blockMode:
+		return p.stopBlockMode(file)
+
+	case traceMode:
+		return p.stopTraceMode()
+
+	case threadMode:
+		return p.stopThreadCreationMode(file)
+
+	case goroutineMode:
+		return p.stopGoroutineMode(file)
+
+	// WARN: we should never reach default!
+	default:
+		return p.stopUnknownMode()
 	}
 }
 
