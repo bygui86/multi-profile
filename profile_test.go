@@ -168,6 +168,24 @@ var profileTests = []profileTest{
 			NoErr,
 		},
 	},
+	{
+		name: "multi profile",
+		code: `
+			package main
+			
+			import "github.com/bygui86/multi-profile"
+			
+			func main() {
+				defer profile.CPUProfile(&profile.ProfileConfig{}).Start().Stop()
+				defer profile.MemProfile(&profile.ProfileConfig{}).Start().Stop()
+			}
+			`,
+		checks: []checkFn{
+			Stdout("cpu profiling enabled", "cpu profiling disabled", "memory profiling (heap) enabled", "memory profiling (heap) disabled"),
+			NoStderr,
+			NoErr,
+		},
+	},
 }
 
 func TestProfiles(t *testing.T) {

@@ -12,8 +12,6 @@ import (
 	"runtime/trace"
 	"sync/atomic"
 	"syscall"
-
-	"github.com/bygui86/multi-profile/logging"
 )
 
 const (
@@ -90,7 +88,7 @@ type Profile struct {
 	closerHook func()
 
 	// Logger offers the possibility to inject a custom logger
-	logger logging.Logger
+	logger Logger
 
 	// started records if a call to profile.Start has already been made
 	started uint32
@@ -130,7 +128,7 @@ type ProfileConfig struct {
 	CloserHook func()
 
 	// Logger offers the possibility to inject a custom logger
-	Logger logging.Logger
+	Logger Logger
 }
 
 // MemProfileType defines which type of memory profiling you want to start
@@ -141,6 +139,20 @@ type profileMode string
 
 // logLevel defines the level at which a message has to be logged
 type logLevel string
+
+type Logger interface {
+	Debug(...interface{})
+	Info(...interface{})
+	Warn(...interface{})
+	Error(...interface{})
+	Fatal(...interface{})
+
+	Debugf(string, ...interface{})
+	Infof(string, ...interface{})
+	Warnf(string, ...interface{})
+	Errorf(string, ...interface{})
+	Fatalf(string, ...interface{})
+}
 
 // CPUProfile creates a CPU profiling object
 func CPUProfile(cfg *ProfileConfig) *Profile {
@@ -592,7 +604,7 @@ func (p *Profile) stopGoroutineMode(file *os.File) func() {
 // stopUnknownMode stops unknown profiling
 func (p *Profile) stopUnknownMode() func() {
 	return func() {
-		p.logf(warnLevel, "Which kind of profiling are you running?")
+		p.log(warnLevel, "Which kind of profiling are you running?")
 		p.logf(infoLevel, "Unknown profiling disabled, file %s", fmt.Sprintf("%s%s", p.path, p.filename))
 	}
 }
@@ -605,7 +617,7 @@ func (p *Profile) startShutdownHook() {
 			signal.Notify(syscallCh, syscall.SIGTERM, syscall.SIGINT, os.Interrupt)
 			<-syscallCh
 
-			p.logf(warnLevel, "caught interrupt signal, stop profiling and flush to file")
+			p.log(warnLevel, "caught interrupt signal, stop profiling and flush to file")
 			p.Stop()
 
 			os.Exit(0)
@@ -639,22 +651,23 @@ func (p *Profile) prepareTempPath() error {
 	return nil
 }
 
+// log abstracts the complexity of using an external specific logger
 func (p *Profile) log(level logLevel, args ...interface{}) {
 	if !p.quiet {
 		if p.logger != nil {
 			switch level {
 			case debugLevel:
-				p.logger.Debug(args)
+				p.logger.Debug(args...)
 			case infoLevel:
-				p.logger.Info(args)
+				p.logger.Info(args...)
 			case warnLevel:
-				p.logger.Warn(args)
+				p.logger.Warn(args...)
 			case errorLevel:
-				p.logger.Error(args)
+				p.logger.Error(args...)
 			case fatalLevel:
-				p.logger.Fatal(args)
+				p.logger.Fatal(args...)
 			default:
-				p.logger.Info(args)
+				p.logger.Info(args...)
 			}
 		} else {
 			fmt.Print(fmt.Sprintf("[%s]", level), args, "\n")
@@ -662,22 +675,23 @@ func (p *Profile) log(level logLevel, args ...interface{}) {
 	}
 }
 
+// logf abstracts the complexity of using an external specific logger
 func (p *Profile) logf(level logLevel, template string, args ...interface{}) {
 	if !p.quiet {
 		if p.logger != nil {
 			switch level {
 			case debugLevel:
-				p.logger.Debugf(template, args)
+				p.logger.Debugf(template, args...)
 			case infoLevel:
-				p.logger.Infof(template, args)
+				p.logger.Infof(template, args...)
 			case warnLevel:
-				p.logger.Warnf(template, args)
+				p.logger.Warnf(template, args...)
 			case errorLevel:
-				p.logger.Errorf(template, args)
+				p.logger.Errorf(template, args...)
 			case fatalLevel:
-				p.logger.Fatalf(template, args)
+				p.logger.Fatalf(template, args...)
 			default:
-				p.logger.Infof(template, args)
+				p.logger.Infof(template, args...)
 			}
 		} else {
 			fmt.Printf("[%s] %s\n", level, fmt.Sprintf(template, args...))
