@@ -5,19 +5,19 @@ import (
 	"log"
 	"net/http"
 
-	profile "github.com/bygui86/multi-profile"
+	"github.com/bygui86/multi-profile"
 )
 
 func main() {
 	defer profile.CPUProfile(&profile.ProfileConfig{}).Start().Stop()
 	defer profile.MemProfile(&profile.ProfileConfig{}).Start().Stop()
 
-	fmt.Println("Starting handling requests")
+	log.Println("Starting handling requests")
 	handleRequests()
 }
 
 func homePage(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Endpoint Hit: homePage")
+	log.Println("Endpoint Hit: homePage")
 	fmt.Fprintf(w, "Welcome to the HomePage!")
 }
 
