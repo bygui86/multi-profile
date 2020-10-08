@@ -23,7 +23,7 @@ var profileTests = []profileTest{
 			import "github.com/bygui86/multi-profile"
 			
 			func main() {
-				defer profile.CPUProfile(&profile.ProfileConfig{}).Start().Stop()
+				defer profile.CPUProfile(&profile.Config{}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
@@ -40,7 +40,7 @@ var profileTests = []profileTest{
 			import "github.com/bygui86/multi-profile"
 	
 			func main() {
-				defer profile.MemProfile(&profile.ProfileConfig{}).Start().Stop()
+				defer profile.MemProfile(&profile.Config{}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
@@ -57,7 +57,7 @@ var profileTests = []profileTest{
 			import "github.com/bygui86/multi-profile"
 	
 			func main() {
-				defer profile.MemProfile(&profile.ProfileConfig{MemProfileType: profile.MemProfileAllocs}).Start().Stop()
+				defer profile.MemProfile(&profile.Config{MemProfileType: profile.MemProfileAllocs}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
@@ -74,7 +74,7 @@ var profileTests = []profileTest{
 			import "github.com/bygui86/multi-profile"
 	
 			func main() {
-				defer profile.MemProfile(&profile.ProfileConfig{MemProfileRate: 1024}).Start().Stop()
+				defer profile.MemProfile(&profile.Config{MemProfileRate: 1024}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
@@ -91,7 +91,7 @@ var profileTests = []profileTest{
 			import "github.com/bygui86/multi-profile"
 	
 			func main() {
-				defer profile.MutexProfile(&profile.ProfileConfig{}).Start().Stop()
+				defer profile.MutexProfile(&profile.Config{}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
@@ -108,7 +108,7 @@ var profileTests = []profileTest{
 			import "github.com/bygui86/multi-profile"
 	
 			func main() {
-				defer profile.BlockProfile(&profile.ProfileConfig{}).Start().Stop()
+				defer profile.BlockProfile(&profile.Config{}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
@@ -125,7 +125,7 @@ var profileTests = []profileTest{
 			import "github.com/bygui86/multi-profile"
 	
 			func main() {
-				defer profile.TraceProfile(&profile.ProfileConfig{}).Start().Stop()
+				defer profile.TraceProfile(&profile.Config{}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
@@ -142,7 +142,7 @@ var profileTests = []profileTest{
 			import "github.com/bygui86/multi-profile"
 	
 			func main() {
-				defer profile.ThreadCreationProfile(&profile.ProfileConfig{}).Start().Stop()
+				defer profile.ThreadCreationProfile(&profile.Config{}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
@@ -159,7 +159,7 @@ var profileTests = []profileTest{
 			import "github.com/bygui86/multi-profile"
 	
 			func main() {
-				defer profile.GoroutineProfile(&profile.ProfileConfig{}).Start().Stop()
+				defer profile.GoroutineProfile(&profile.Config{}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
@@ -176,8 +176,8 @@ var profileTests = []profileTest{
 			import "github.com/bygui86/multi-profile"
 			
 			func main() {
-				defer profile.CPUProfile(&profile.ProfileConfig{}).Start().Stop()
-				defer profile.MemProfile(&profile.ProfileConfig{}).Start().Stop()
+				defer profile.CPUProfile(&profile.Config{}).Start().Stop()
+				defer profile.MemProfile(&profile.Config{}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
@@ -217,7 +217,7 @@ var optionsTests = []profileTest{
 			import "github.com/bygui86/multi-profile"
 	
 			func main() {
-				defer profile.CPUProfile(&profile.ProfileConfig{Quiet: true}).Start().Stop()
+				defer profile.CPUProfile(&profile.Config{Quiet: true}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
@@ -237,7 +237,7 @@ var optionsTests = []profileTest{
 			)
 	
 			func main() {
-				defer profile.CPUProfile(&profile.ProfileConfig{Path: os.Getenv("HOME")}).Start().Stop()
+				defer profile.CPUProfile(&profile.Config{Path: os.Getenv("HOME")}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
@@ -254,7 +254,7 @@ var optionsTests = []profileTest{
 			import "github.com/bygui86/multi-profile"
 	
 			func main() {
-				defer profile.CPUProfile(&profile.ProfileConfig{UseTempPath: true}).Start().Stop()
+				defer profile.CPUProfile(&profile.Config{UseTempPath: true}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
@@ -274,7 +274,7 @@ var optionsTests = []profileTest{
 			)
 			
 			func main() {
-				defer profile.CPUProfile(&profile.ProfileConfig{CloserHook: closerFn}).Start().Stop()
+				defer profile.CPUProfile(&profile.Config{CloserHook: closerFn}).Start().Stop()
 			}
 
 			func closerFn() {
@@ -294,7 +294,7 @@ var optionsTests = []profileTest{
 			import "github.com/bygui86/multi-profile"
 	
 			func main() {
-				defer profile.CPUProfile(&profile.ProfileConfig{Path: "/private"}).Start().Stop()
+				defer profile.CPUProfile(&profile.Config{Path: "/private"}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
