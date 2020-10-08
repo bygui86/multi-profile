@@ -649,9 +649,43 @@ func (p *Profile) startShutdownHook() {
 	}
 }
 
-func (p *Profile) log(format string, args ...interface{}) {
+func (p *Profile) log(template string, args ...interface{}) {
 	if !p.quiet {
-		// TODO replace it with fmt?
-		fmt.Printf(format, args...)
+		fmt.Printf(template, args...)
+	}
+}
+
+// TODO work in progress
+
+const (
+	debugLevel logLevel = "debug"
+	infoLevel  logLevel = "info"
+	warnLevel  logLevel = "warn"
+	errorLevel logLevel = "error"
+	fatalLevel logLevel = "fatal"
+)
+
+type logLevel string
+
+func (p *Profile) logf(level logLevel, template string, args ...interface{}) {
+	if !p.quiet {
+		if p.logger != nil {
+			switch level {
+			case debugLevel:
+				p.logger.Debugf(template, args)
+			case infoLevel:
+				p.logger.Infof(template, args)
+			case warnLevel:
+				p.logger.Warnf(template, args)
+			case errorLevel:
+				p.logger.Errorf(template, args)
+			case fatalLevel:
+				p.logger.Fatalf(template, args)
+			default:
+				p.logger.Infof(template, args)
+			}
+		} else {
+			fmt.Printf("[%s] %s", level, fmt.Sprintf(template, args...))
+		}
 	}
 }
