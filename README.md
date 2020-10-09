@@ -22,9 +22,7 @@ This project was inspired by [pkg/profile](https://github.com/pkg/profile) but t
     - [x] ~~godoc badge in readme, e.g.~~
 - [x] ~~more advanced logger (e.g. zap, logrus) through interface~~
 - [x] ~~other code improvements~~
-- [ ] `TBD` - offer the possibility to avoid blocking whole application if profiling fails
-    - [ ] replace 'os.Exit' with 'panic' + 'log & recover'
-    - [ ] write a new 'Start' function like 'StartNoPanic' or else
+- [x] ~~offer the possibility to avoid blocking whole application if profiling fails (replace 'os.Exit' with 'panic' + 'log & recover')~~
 - [ ] introduce [go-releaser](https://goreleaser.com/), [example](https://github.com/bygui86/go-releaser)
 
 ## Installation

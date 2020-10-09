@@ -267,16 +267,16 @@ var optionsTests = []profileTest{
 		name: "custom closer option",
 		code: `
 			package main
-			
+	
 			import (
 				"fmt"
 				"github.com/bygui86/multi-profile"
 			)
-			
+	
 			func main() {
 				defer profile.CPUProfile(&profile.Config{CloserHook: closerFn}).Start().Stop()
 			}
-
+	
 			func closerFn() {
 				fmt.Println("custom closer")
 			}
@@ -300,6 +300,22 @@ var optionsTests = []profileTest{
 		checks: []checkFn{
 			Stdout("permission denied"),
 			Stderr("exit status"),
+			Err,
+		},
+	},
+	{
+		name: "no exit",
+		code: `
+			package main
+	
+			import "github.com/bygui86/multi-profile"
+	
+			func main() {
+				defer profile.CPUProfile(&profile.Config{Path: "/private", NoExit: true}).Start().Stop()
+			}
+			`,
+		checks: []checkFn{
+			Stdout("permission denied"),
 			Err,
 		},
 	},
@@ -331,14 +347,14 @@ type profileTest struct {
 
 type checkFn func(t *testing.T, stdout, stderr []byte, err error)
 
-// NoStdout checks that stdout was blank.
+// NoStdout checks that stdout was blank
 func NoStdout(t *testing.T, stdout, stderr []byte, err error) {
 	if len(stdout) > 0 {
 		t.Errorf("stdout: expected 0 bytes, actual %d bytes - bytes to string: '%s'", len(stdout), string(stdout))
 	}
 }
 
-// Stderr verifies that the given lines match the output from stderr.
+// Stdout verifies that the given lines match the output from stdout
 func Stdout(lines ...string) checkFn {
 	return func(t *testing.T, stdout, stderr []byte, err error) {
 		r := bytes.NewReader(stdout)
@@ -348,14 +364,14 @@ func Stdout(lines ...string) checkFn {
 	}
 }
 
-// NoStderr checks that stderr was blank.
+// NoStderr checks that stderr was blank
 func NoStderr(t *testing.T, stdout, stderr []byte, err error) {
 	if len(stderr) > 0 {
 		t.Errorf("stderr: expected 0 bytes, actual %d bytes - bytes to string: '%s'", len(stderr), string(stderr))
 	}
 }
 
-// Stderr verifies that the given lines match the output from stderr.
+// Stderr verifies that the given lines match the output from stderr
 func Stderr(lines ...string) checkFn {
 	return func(t *testing.T, stdout, stderr []byte, err error) {
 		r := bytes.NewReader(stderr)
@@ -365,7 +381,7 @@ func Stderr(lines ...string) checkFn {
 	}
 }
 
-// NoErr checks that err was nil.
+// NoErr checks that err was nil
 func NoErr(t *testing.T, stdout, stderr []byte, err error) {
 	if err != nil {
 		t.Errorf("error: expected nil, actual '%v'", err)
@@ -379,7 +395,7 @@ func Err(t *testing.T, stdout, stderr []byte, err error) {
 	}
 }
 
-// validateOutput validates the given slice of lines against data from the given reader.
+// validateOutput validates the given slice of lines against data from the given reader
 func validateOutput(reader io.Reader, expected []string) bool {
 	scanner := bufio.NewScanner(reader)
 	for _, line := range expected {
@@ -441,7 +457,7 @@ func checkPprofFiles(t *testing.T, pprofFilesPath []string) {
 	}
 }
 
-// cleanupPprofFiles deletes all specified pprof files.
+// cleanupPprofFiles deletes all specified pprof files
 func cleanupPprofFiles(t *testing.T, pprofFilesPath []string) {
 	for _, pprof := range pprofFilesPath {
 		err := os.Remove(pprof)
