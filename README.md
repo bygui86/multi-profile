@@ -6,7 +6,7 @@
 
 Multi-profiling support package for Go.
 
-This project was inspired by [pkg/profile](github.com/pkg/profile) but there is a fundamental difference: multi-profile offers the possibility to start multiple profiling at the same time.
+This project was inspired by [pkg/profile](https://github.com/pkg/profile) but there is a fundamental difference: multi-profile offers the possibility to start multiple profiling at the same time.
 
 ## TODO list
 
@@ -20,8 +20,12 @@ This project was inspired by [pkg/profile](github.com/pkg/profile) but there is 
     - [x] ~~complete all sections~~
     - [x] ~~github actions badge in readme~~
     - [x] ~~godoc badge in readme, e.g.~~
-- [ ] more advanced logger (e.g. zap, logrus) through interface
-- [ ] create releases automatically
+- [x] ~~more advanced logger (e.g. zap, logrus) through interface~~
+- [x] ~~other code improvements~~
+- [ ] `TBD` - offer the possibility to avoid blocking whole application if profiling fails
+    - [ ] replace 'os.Exit' with 'panic' + 'log & recover'
+    - [ ] write a new 'Start' function like 'StartNoPanic' or else
+- [ ] introduce [go-releaser](https://goreleaser.com/), [example](https://github.com/bygui86/go-releaser)
 
 ## Installation
 
@@ -41,7 +45,7 @@ package main
 import "github.com/bygui86/multi-profile"
 
 func main() {
-    defer profile.CPUProfile(&profile.ProfileConfig{}).Start().Stop()
+    defer profile.CPUProfile(&profile.Config{}).Start().Stop()
     
     // ...
 }
@@ -55,9 +59,9 @@ package main
 import "github.com/bygui86/multi-profile"
 
 func main() {
-    defer profile.CPUProfile(&profile.ProfileConfig{}).Start().Stop()
-    defer profile.MemProfile(&profile.ProfileConfig{}).Start().Stop()
-    defer profile.GoroutineProfile(&profile.ProfileConfig{}).Start().Stop()
+    defer profile.CPUProfile(&profile.Config{}).Start().Stop()
+    defer profile.MemProfile(&profile.Config{}).Start().Stop()
+    defer profile.GoroutineProfile(&profile.Config{}).Start().Stop()
 
     // ...
 }
