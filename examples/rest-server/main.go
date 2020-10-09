@@ -9,8 +9,8 @@ import (
 )
 
 func main() {
-	defer profile.CPUProfile(&profile.ProfileConfig{}).Start().Stop()
-	defer profile.MemProfile(&profile.ProfileConfig{}).Start().Stop()
+	defer profile.CPUProfile(&profile.Config{}).Start().Stop()
+	defer profile.MemProfile(&profile.Config{}).Start().Stop()
 
 	log.Println("Starting handling requests")
 	handleRequests()

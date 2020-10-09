@@ -12,8 +12,8 @@ import (
 func main() {
 	logging.InitGlobalLogger()
 
-	defer profile.CPUProfile(&profile.ProfileConfig{Path: "/multi-profile", Logger: logging.SugaredLog}).Start().Stop()
-	defer profile.MemProfile(&profile.ProfileConfig{Path: "/multi-profile", Logger: logging.SugaredLog}).Start().Stop()
+	defer profile.CPUProfile(&profile.Config{Logger: logging.SugaredLog}).Start().Stop()
+	defer profile.MemProfile(&profile.Config{Logger: logging.SugaredLog}).Start().Stop()
 
 	logging.Log.Info("Starting handling requests")
 	handleRequests()
