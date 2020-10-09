@@ -5,17 +5,17 @@ import (
 )
 
 func OneLine() {
-	defer profile.CPUProfile(&profile.ProfileConfig{}).Start().Stop()
+	defer profile.CPUProfile(&profile.Config{}).Start().Stop()
 }
 
 func Multiple() {
-	defer profile.CPUProfile(&profile.ProfileConfig{}).Start().Stop()
-	defer profile.MemProfile(&profile.ProfileConfig{}).Start().Stop()
-	defer profile.GoroutineProfile(&profile.ProfileConfig{}).Start().Stop()
+	defer profile.CPUProfile(&profile.Config{}).Start().Stop()
+	defer profile.MemProfile(&profile.Config{}).Start().Stop()
+	defer profile.GoroutineProfile(&profile.Config{}).Start().Stop()
 }
 
 func CPUProfile() {
-	cfg := &profile.ProfileConfig{}
+	cfg := &profile.Config{}
 	prof := profile.CPUProfile(cfg)
 	prof.Start()
 	defer prof.Stop()
@@ -23,7 +23,7 @@ func CPUProfile() {
 
 // Default to type heap
 func MemProfile() {
-	cfg := &profile.ProfileConfig{}
+	cfg := &profile.Config{}
 	prof := profile.MemProfile(cfg)
 	prof.Start()
 	defer prof.Stop()
@@ -31,7 +31,7 @@ func MemProfile() {
 
 // Default to type heap
 func MemProfileRate() {
-	cfg := &profile.ProfileConfig{
+	cfg := &profile.Config{
 		MemProfileRate: 1024,
 	}
 	prof := profile.MemProfile(cfg)
@@ -40,7 +40,7 @@ func MemProfileRate() {
 }
 
 func MemProfileAllocs() {
-	cfg := &profile.ProfileConfig{
+	cfg := &profile.Config{
 		MemProfileType: profile.MemProfileAllocs,
 	}
 	prof := profile.MemProfile(cfg)
@@ -49,7 +49,7 @@ func MemProfileAllocs() {
 }
 
 func MemProfileAllocsRate() {
-	cfg := &profile.ProfileConfig{
+	cfg := &profile.Config{
 		MemProfileRate: 1024,
 		MemProfileType: profile.MemProfileAllocs,
 	}
@@ -59,35 +59,35 @@ func MemProfileAllocsRate() {
 }
 
 func MutexProfile() {
-	cfg := &profile.ProfileConfig{}
+	cfg := &profile.Config{}
 	prof := profile.MutexProfile(cfg)
 	prof.Start()
 	defer prof.Stop()
 }
 
 func BlockProfile() {
-	cfg := &profile.ProfileConfig{}
+	cfg := &profile.Config{}
 	prof := profile.BlockProfile(cfg)
 	prof.Start()
 	defer prof.Stop()
 }
 
 func TraceProfile() {
-	cfg := &profile.ProfileConfig{}
+	cfg := &profile.Config{}
 	prof := profile.TraceProfile(cfg)
 	prof.Start()
 	defer prof.Stop()
 }
 
 func ThreadCreationProfile() {
-	cfg := &profile.ProfileConfig{}
+	cfg := &profile.Config{}
 	prof := profile.ThreadCreationProfile(cfg)
 	prof.Start()
 	defer prof.Stop()
 }
 
 func GoroutineProfile() {
-	cfg := &profile.ProfileConfig{}
+	cfg := &profile.Config{}
 	prof := profile.GoroutineProfile(cfg)
 	prof.Start()
 	defer prof.Stop()

@@ -1,4 +1,4 @@
-module github.com/bygui86/multi-profile/examples/rest-server
+module github.com/bygui86/multi-profile/examples/no-exit
 
 go 1.15
 
