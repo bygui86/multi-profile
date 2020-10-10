@@ -2,7 +2,7 @@
 # multi-profile
 
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/bygui86/multi-profile)](https://pkg.go.dev/github.com/bygui86/multi-profile)
-[![BuildStatus](https://github.com/bygui86/multi-profile/workflows/ci-cd/badge.svg)](https://github.com/bygui86/multi-profile/actions)
+[![BuildStatus](https://github.com/bygui86/multi-profile/workflows/build/badge.svg)](https://github.com/bygui86/multi-profile/actions)
 
 Multi-profiling support package for Go.
 
