@@ -2,10 +2,12 @@
 before:
   hooks:
     - go mod download
-    - go generate ./...
-builds:
-  - env:
-    - CGO_ENABLED=0
+project_name: multi-profile
+build:
+  skip: true
+release:
+  github:
+  prerelease: auto
 archives:
   - replacements:
       darwin: Darwin
