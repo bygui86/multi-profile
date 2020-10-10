@@ -1,13 +1,11 @@
 # See documentation at http://goreleaser.com
+project_name: multi-profile
 before:
   hooks:
     - go mod download
-project_name: multi-profile
-build:
-  skip: true
-release:
-  github:
-  prerelease: auto
+    - go generate ./...
+builds:
+  - skip: true
 archives:
   - replacements:
       darwin: Darwin

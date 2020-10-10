@@ -24,8 +24,11 @@ mod-down :		## Download go modules references
 mod-tidy :		## Tidy go modules references
 	go mod tidy
 
-test:
+test:		## Run all tests
 	go test -coverprofile=coverage.out -count=5 -race ./...
+
+release:		## Release library
+	goreleaser release --rm-dist
 
 ## helpers
 
