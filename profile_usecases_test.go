@@ -263,6 +263,24 @@ var optionsTests = []profileTest{
 		},
 	},
 	{
+		name: "interrupt hook option",
+		code: `
+			package main
+	
+			import "github.com/bygui86/multi-profile"
+	
+			func main() {
+				defer profile.CPUProfile(&profile.Config{EnableInterruptHook: true}).Start().Stop()
+			}
+
+			`,
+		checks: []checkFn{
+			Stdout("cpu profiling enabled", "start interrupt hook", "cpu profiling disabled"),
+			NotInStdout("panic situation recovered"),
+			NoErr,
+		},
+	},
+	{
 		name: "custom closer option",
 		code: `
 			package main

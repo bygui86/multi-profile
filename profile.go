@@ -77,8 +77,8 @@ type Profile struct {
 	// noExit holds the flag to decide whether a profile fail panics the whole application
 	noExit bool
 
-	// disableShutdownHook controls whether the profiling package should hook SIGINT to write profiles cleanly
-	disableShutdownHook bool
+	// enableInterruptHook controls whether to start a goroutine to wait for interruption signals to stop profiling
+	enableInterruptHook bool
 
 	// quiet suppresses informational messages during profiling
 	quiet bool
@@ -129,8 +129,8 @@ type Config struct {
 	// NoExit holds the flag to decide whether a profile fail panics the whole application
 	NoExit bool
 
-	// DisableShutdownHook controls whether the profiling package should hook SIGINT to write profiles cleanly
-	DisableShutdownHook bool
+	// EnableInterruptHook controls whether to start a goroutine to wait for interruption signals to stop profiling
+	EnableInterruptHook bool
 
 	// Quiet suppresses informational messages during profiling
 	Quiet bool
@@ -262,7 +262,7 @@ func (p *Profile) Start() *Profile {
 		p.startGoroutineMode()
 	}
 
-	p.startShutdownHook()
+	p.startInterruptHook()
 
 	return p
 }
@@ -428,18 +428,17 @@ func (p *Profile) stopGoroutineMode() {
 	p.stopAndFlush()
 }
 
-// startShutdownHook starts a goroutine to wait for interruption signals and stop cleanly the profiling.
-func (p *Profile) startShutdownHook() {
-	if !p.disableShutdownHook {
+// startInterruptHook starts a goroutine to wait for interruption signals and stop the profiling
+func (p *Profile) startInterruptHook() {
+	if p.enableInterruptHook {
+		p.logf(infoLevel, "Start interrupt hook for %s profiling", string(p.mode))
 		go func() {
 			syscallCh := make(chan os.Signal)
 			signal.Notify(syscallCh, syscall.SIGTERM, syscall.SIGINT, os.Interrupt)
 			<-syscallCh
 
-			p.log(warnLevel, "caught interrupt signal, stop profiling and flush to file")
+			p.logf(warnLevel, "Caught interrupt signal, stop and flush %s profiling to file", string(p.mode))
 			p.Stop()
-
-			os.Exit(0)
 		}()
 	}
 }
@@ -453,7 +452,7 @@ func buildProfile(mode profileMode, lookupName, fileName string, cfg *Config) *P
 		useTempPath:         cfg.UseTempPath,
 		fileName:            fileName,
 		noExit:              cfg.NoExit,
-		disableShutdownHook: cfg.DisableShutdownHook,
+		enableInterruptHook: cfg.EnableInterruptHook,
 		quiet:               cfg.Quiet,
 		logger:              cfg.Logger,
 		closerHook:          cfg.CloserHook,
