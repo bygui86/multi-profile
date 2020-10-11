@@ -5,7 +5,6 @@
 
 # ENVIRONMENT VARIABLES
 export GO111MODULE=on
-export GOPRIVATE=gitlab.com/swissblock
 
 
 # CONFIG
@@ -14,6 +13,8 @@ export GOPRIVATE=gitlab.com/swissblock
 
 
 # ACTIONS
+
+## code
 
 build :		## Build package
 	go build ./...
@@ -24,8 +25,16 @@ mod-down :		## Download go modules references
 mod-tidy :		## Tidy go modules references
 	go mod tidy
 
-test:
+test:		## Run all tests
 	go test -coverprofile=coverage.out -count=5 -race ./...
+
+## release
+
+simulate-release:		## Simulate a library release
+	goreleaser --snapshot --skip-publish --rm-dist
+
+release:		## Release library
+	goreleaser release --rm-dist
 
 ## helpers
 

@@ -2,28 +2,20 @@
 # multi-profile
 
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/bygui86/multi-profile)](https://pkg.go.dev/github.com/bygui86/multi-profile)
-[![BuildStatus](https://github.com/bygui86/multi-profile/workflows/ci-cd/badge.svg)](https://github.com/bygui86/multi-profile/actions)
+![GoVersion](https://img.shields.io/github/go-mod/go-version/bygui86/multi-profile)
+![License](https://img.shields.io/github/license/bygui86/multi-profile)
+
+[![BuildStatus](https://github.com/bygui86/multi-profile/workflows/build/badge.svg)](https://github.com/bygui86/multi-profile/actions)
+![LatestRelease](https://img.shields.io/github/v/release/bygui86/multi-profile)
+
+![LatestTag](https://img.shields.io/github/v/tag/bygui86/multi-profile)
+![LastCommit](https://img.shields.io/github/last-commit/bygui86/multi-profile)
+![Issues](https://img.shields.io/github/issues/bygui86/multi-profile)
+![PullRequests](https://img.shields.io/github/issues-pr/bygui86/multi-profile)
 
 Multi-profiling support package for Go.
 
 This project was inspired by [pkg/profile](https://github.com/pkg/profile) but there is a fundamental difference: multi-profile offers the possibility to start multiple profiling at the same time.
-
-## TODO list
-
-- [x] ~~align with profile original (last align 1.10.2020)~~
-- [x] ~~testing~~
-- [x] ~~improve os.exit codes~~
-- [x] ~~github actions~~
-    - [x] ~~build stage for all all branches~~
-    - [x] ~~test stage for all branches~~
-- [x] ~~README~~
-    - [x] ~~complete all sections~~
-    - [x] ~~github actions badge in readme~~
-    - [x] ~~godoc badge in readme, e.g.~~
-- [x] ~~more advanced logger (e.g. zap, logrus) through interface~~
-- [x] ~~other code improvements~~
-- [x] ~~offer the possibility to avoid blocking whole application if profiling fails (replace 'os.Exit' with 'panic' + 'log & recover')~~
-- [ ] introduce [go-releaser](https://goreleaser.com/), [example](https://github.com/bygui86/go-releaser)
 
 ## Installation
 
@@ -101,3 +93,7 @@ You can call a function right after stopping the profiling. Use `CloserHook` fie
 I welcome pull requests, bug fixes and issue reports.
 
 To propose an extensive change, please discuss it first by opening an issue.
+
+## Thanks
+
+- [shields.io](https://shields.io) for providing badges
