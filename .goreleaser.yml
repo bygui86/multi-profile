@@ -9,10 +9,6 @@ project_name: multi-profile
 #build:
 #  skip: true
 
-#release:
-#  github:
-#  prerelease: auto
-
 builds:
   - skip: true
 
@@ -23,9 +19,13 @@ builds:
 #      - linux
 #    skip: true
 
-#archives:
-#  - replacements:
-#      linux: Linux
+archives:
+  - replacements:
+      linux: Linux
+
+release:
+  github:
+  prerelease: auto
 
 checksum:
   name_template: 'checksums.txt'
