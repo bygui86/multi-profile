@@ -14,180 +14,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var profileTests = []profileTest{
-	{
-		name: "cpu profile",
-		code: `
-			package main
-			
-			import "github.com/bygui86/multi-profile"
-			
-			func main() {
-				defer profile.CPUProfile(&profile.Config{}).Start().Stop()
-			}
-			`,
-		checks: []checkFn{
-			Stdout("cpu profiling enabled", "cpu profiling disabled"),
-			NoStderr,
-			NoErr,
-		},
-	},
-	{
-		name: "heap memory profile",
-		code: `
-			package main
-	
-			import "github.com/bygui86/multi-profile"
-	
-			func main() {
-				defer profile.MemProfile(&profile.Config{}).Start().Stop()
-			}
-			`,
-		checks: []checkFn{
-			Stdout("memory profiling (heap) enabled", "memory profiling (heap) disabled"),
-			NoStderr,
-			NoErr,
-		},
-	},
-	{
-		name: "allocs memory profile",
-		code: `
-			package main
-	
-			import "github.com/bygui86/multi-profile"
-	
-			func main() {
-				defer profile.MemProfile(&profile.Config{MemProfileType: profile.MemProfileAllocs}).Start().Stop()
-			}
-			`,
-		checks: []checkFn{
-			Stdout("memory profiling (allocs) enabled", "memory profiling (allocs) disabled"),
-			NoStderr,
-			NoErr,
-		},
-	},
-	{
-		name: "rate memory profile",
-		code: `
-			package main
-	
-			import "github.com/bygui86/multi-profile"
-	
-			func main() {
-				defer profile.MemProfile(&profile.Config{MemProfileRate: 1024}).Start().Stop()
-			}
-			`,
-		checks: []checkFn{
-			Stdout("memory profiling (heap) enabled at rate 1024", "memory profiling (heap) disabled"),
-			NoStderr,
-			NoErr,
-		},
-	},
-	{
-		name: "mutex profile",
-		code: `
-			package main
-	
-			import "github.com/bygui86/multi-profile"
-	
-			func main() {
-				defer profile.MutexProfile(&profile.Config{}).Start().Stop()
-			}
-			`,
-		checks: []checkFn{
-			Stdout("mutex profiling enabled", "mutex profiling disabled"),
-			NoStderr,
-			NoErr,
-		},
-	},
-	{
-		name: "block profile",
-		code: `
-			package main
-	
-			import "github.com/bygui86/multi-profile"
-	
-			func main() {
-				defer profile.BlockProfile(&profile.Config{}).Start().Stop()
-			}
-			`,
-		checks: []checkFn{
-			Stdout("block profiling enabled", "block profiling disabled"),
-			NoStderr,
-			NoErr,
-		},
-	},
-	{
-		name: "trace profile",
-		code: `
-			package main
-	
-			import "github.com/bygui86/multi-profile"
-	
-			func main() {
-				defer profile.TraceProfile(&profile.Config{}).Start().Stop()
-			}
-			`,
-		checks: []checkFn{
-			Stdout("trace profiling enabled", "trace profiling disabled"),
-			NoStderr,
-			NoErr,
-		},
-	},
-	{
-		name: "thread creation profile",
-		code: `
-			package main
-	
-			import "github.com/bygui86/multi-profile"
-	
-			func main() {
-				defer profile.ThreadCreationProfile(&profile.Config{}).Start().Stop()
-			}
-			`,
-		checks: []checkFn{
-			Stdout("thread creation profiling enabled", "thread creation profiling disabled"),
-			NoStderr,
-			NoErr,
-		},
-	},
-	{
-		name: "goroutine profile",
-		code: `
-			package main
-	
-			import "github.com/bygui86/multi-profile"
-	
-			func main() {
-				defer profile.GoroutineProfile(&profile.Config{}).Start().Stop()
-			}
-			`,
-		checks: []checkFn{
-			Stdout("goroutine profiling enabled", "goroutine profiling disabled"),
-			NoStderr,
-			NoErr,
-		},
-	},
-	{
-		name: "multi profile",
-		code: `
-			package main
-			
-			import "github.com/bygui86/multi-profile"
-			
-			func main() {
-				defer profile.CPUProfile(&profile.Config{}).Start().Stop()
-				defer profile.MemProfile(&profile.Config{}).Start().Stop()
-			}
-			`,
-		checks: []checkFn{
-			Stdout("cpu profiling enabled", "cpu profiling disabled", "memory profiling (heap) enabled", "memory profiling (heap) disabled"),
-			NoStderr,
-			NoErr,
-		},
-	},
-}
-
 func TestProfiles(t *testing.T) {
 	for _, profTest := range profileTests {
 		t.Logf("Run profile test '%s'", profTest.name)
@@ -206,119 +32,6 @@ func TestProfiles(t *testing.T) {
 		"./cpu.pprof", "./mem.pprof", "./mutex.pprof", "./block.pprof",
 		"./trace.pprof", "./thread.pprof", "./goroutine.pprof",
 	})
-}
-
-var optionsTests = []profileTest{
-	{
-		name: "quiet option",
-		code: `
-			package main
-	
-			import "github.com/bygui86/multi-profile"
-	
-			func main() {
-				defer profile.CPUProfile(&profile.Config{Quiet: true}).Start().Stop()
-			}
-			`,
-		checks: []checkFn{
-			NoStdout,
-			NoStderr,
-			NoErr,
-		},
-	},
-	{
-		name: "custom path option",
-		code: `
-			package main
-	
-			import (
-				"os"
-				"github.com/bygui86/multi-profile"
-			)
-	
-			func main() {
-				defer profile.CPUProfile(&profile.Config{Path: os.Getenv("HOME")}).Start().Stop()
-			}
-			`,
-		checks: []checkFn{
-			Stdout("cpu profiling enabled", "cpu profiling disabled", os.Getenv("HOME")+"/cpu.pprof"),
-			NoStderr,
-			NoErr,
-		},
-	},
-	{
-		name: "temp path option",
-		code: `
-			package main
-	
-			import "github.com/bygui86/multi-profile"
-	
-			func main() {
-				defer profile.CPUProfile(&profile.Config{UseTempPath: true}).Start().Stop()
-			}
-			`,
-		checks: []checkFn{
-			Stdout("cpu profiling enabled", "cpu profiling disabled", "profile_"),
-			NoStderr,
-			NoErr,
-		},
-	},
-	{
-		name: "custom closer option",
-		code: `
-			package main
-	
-			import (
-				"fmt"
-				"github.com/bygui86/multi-profile"
-			)
-	
-			func main() {
-				defer profile.CPUProfile(&profile.Config{CloserHook: closerFn}).Start().Stop()
-			}
-	
-			func closerFn() {
-				fmt.Println("custom closer")
-			}
-			`,
-		checks: []checkFn{
-			Stdout("cpu profiling enabled", "cpu profiling disabled", "custom closer"),
-			NoErr,
-		},
-	},
-	{
-		name: "custom path error",
-		code: `
-			package main
-	
-			import "github.com/bygui86/multi-profile"
-	
-			func main() {
-				defer profile.CPUProfile(&profile.Config{Path: "/private"}).Start().Stop()
-			}
-			`,
-		checks: []checkFn{
-			Stdout("permission denied"),
-			Stderr("exit status"),
-			Err,
-		},
-	},
-	{
-		name: "no exit",
-		code: `
-			package main
-	
-			import "github.com/bygui86/multi-profile"
-	
-			func main() {
-				defer profile.CPUProfile(&profile.Config{Path: "/private", NoExit: true}).Start().Stop()
-			}
-			`,
-		checks: []checkFn{
-			Stdout("permission denied"),
-			Err,
-		},
-	},
 }
 
 func TestOptions(t *testing.T) {
@@ -347,13 +60,6 @@ type profileTest struct {
 
 type checkFn func(t *testing.T, stdout, stderr []byte, err error)
 
-// NoStdout checks that stdout was blank
-func NoStdout(t *testing.T, stdout, stderr []byte, err error) {
-	if len(stdout) > 0 {
-		t.Errorf("stdout: expected 0 bytes, actual %d bytes - bytes to string: '%s'", len(stdout), string(stdout))
-	}
-}
-
 // Stdout verifies that the given lines match the output from stdout
 func Stdout(lines ...string) checkFn {
 	return func(t *testing.T, stdout, stderr []byte, err error) {
@@ -364,10 +70,20 @@ func Stdout(lines ...string) checkFn {
 	}
 }
 
-// NoStderr checks that stderr was blank
-func NoStderr(t *testing.T, stdout, stderr []byte, err error) {
-	if len(stderr) > 0 {
-		t.Errorf("stderr: expected 0 bytes, actual %d bytes - bytes to string: '%s'", len(stderr), string(stderr))
+// NotInStdout verifies that the given lines do not match the output from stdout
+func NotInStdout(lines ...string) checkFn {
+	return func(t *testing.T, stdout, stderr []byte, err error) {
+		r := bytes.NewReader(stdout)
+		if validateOutput(r, lines) {
+			t.Errorf("stdout: '%s' was not expected, but found in stdout '%s'", strings.Join(lines, ", "), stdout)
+		}
+	}
+}
+
+// NoStdout checks that stdout was blank
+func NoStdout(t *testing.T, stdout, stderr []byte, err error) {
+	if len(stdout) > 0 {
+		t.Errorf("stdout: expected 0 bytes, actual %d bytes - bytes to string: '%s'", len(stdout), string(stdout))
 	}
 }
 
@@ -381,10 +97,10 @@ func Stderr(lines ...string) checkFn {
 	}
 }
 
-// NoErr checks that err was nil
-func NoErr(t *testing.T, stdout, stderr []byte, err error) {
-	if err != nil {
-		t.Errorf("error: expected nil, actual '%v'", err)
+// NoStderr checks that stderr was blank
+func NoStderr(t *testing.T, stdout, stderr []byte, err error) {
+	if len(stderr) > 0 {
+		t.Errorf("stderr: expected 0 bytes, actual %d bytes - bytes to string: '%s'", len(stderr), string(stderr))
 	}
 }
 
@@ -395,7 +111,14 @@ func Err(t *testing.T, stdout, stderr []byte, err error) {
 	}
 }
 
-// validateOutput validates the given slice of lines against data from the given reader
+// NoErr checks that err was nil
+func NoErr(t *testing.T, stdout, stderr []byte, err error) {
+	if err != nil {
+		t.Errorf("error: expected nil, actual '%v'", err)
+	}
+}
+
+// validateOutput checks if the given slice of lines are among data from the given reader
 func validateOutput(reader io.Reader, expected []string) bool {
 	scanner := bufio.NewScanner(reader)
 	for _, line := range expected {
