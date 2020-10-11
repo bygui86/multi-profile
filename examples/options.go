@@ -31,9 +31,9 @@ func TempDirPath() {
 	defer prof.Stop()
 }
 
-// Example to disable the automatic shutdown hook
-func DisableShutdownHook() {
-	cfg := &profile.Config{DisableShutdownHook: true}
+// Example to enable the automatic shutdown hook based on interruption signals
+func EnableInterruptHook() {
+	cfg := &profile.Config{EnableInterruptHook: true}
 	prof := profile.CPUProfile(cfg)
 	prof.Start()
 	defer prof.Stop()
