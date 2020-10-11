@@ -2,22 +2,32 @@
 
 project_name: multi-profile
 
-build:
-  skip: true
+#build:
+#  skip: true
 
-release:
-  github:
-  prerelease: auto
+builds:
+  - skip: true
 
-archives:
-  - replacements:
-      linux: Linux
+#builds:
+#  - env:
+#      - CGO_ENABLED=0
+#    goos:
+#      - linux
+#    skip: true
 
-checksum:
-  name_template: 'checksums.txt'
+#release:
+#  github:
+#  prerelease: auto
 
-snapshot:
-  name_template: "{{ .Tag }}-next"
+#archives:
+#  - replacements:
+#      linux: Linux
+
+#checksum:
+#  name_template: 'checksums.txt'
+
+#snapshot:
+#  name_template: "{{ .Tag }}-next"
 
 changelog:
   sort: asc
