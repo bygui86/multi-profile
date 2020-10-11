@@ -23,6 +23,7 @@ jobs:
         run: go build ./...
       - name: Test
         run: go test -count=3 -race ./...
+# TODO enable back when found a suitable goreleaser config
       - name: Release
         uses: goreleaser/goreleaser-action@v2
         with:

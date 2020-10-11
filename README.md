@@ -17,23 +17,6 @@ Multi-profiling support package for Go.
 
 This project was inspired by [pkg/profile](https://github.com/pkg/profile) but there is a fundamental difference: multi-profile offers the possibility to start multiple profiling at the same time.
 
-## TODO list
-
-- [x] ~~align with profile original (last align 1.10.2020)~~
-- [x] ~~testing~~
-- [x] ~~improve os.exit codes~~
-- [x] ~~github actions~~
-    - [x] ~~build stage for all all branches~~
-    - [x] ~~test stage for all branches~~
-- [x] ~~README~~
-    - [x] ~~complete all sections~~
-    - [x] ~~github actions badge in readme~~
-    - [x] ~~godoc badge in readme, e.g.~~
-- [x] ~~more advanced logger (e.g. zap, logrus) through interface~~
-- [x] ~~other code improvements~~
-- [x] ~~offer the possibility to avoid blocking whole application if profiling fails (replace 'os.Exit' with 'panic' + 'log & recover')~~
-- [ ] introduce [go-releaser](https://goreleaser.com/), [example](https://github.com/bygui86/go-releaser)
-
 ## Installation
 
 ```shell script

@@ -5,7 +5,6 @@
 
 # ENVIRONMENT VARIABLES
 export GO111MODULE=on
-export GOPRIVATE=gitlab.com/swissblock
 
 
 # CONFIG
@@ -15,7 +14,7 @@ export GOPRIVATE=gitlab.com/swissblock
 
 # ACTIONS
 
-## codebase
+## code
 
 build :		## Build package
 	go build ./...
