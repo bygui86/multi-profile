@@ -2,7 +2,16 @@
 # multi-profile
 
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/bygui86/multi-profile)](https://pkg.go.dev/github.com/bygui86/multi-profile)
+![GoVersion](https://img.shields.io/github/go-mod/go-version/bygui86/multi-profile)
+![License](https://img.shields.io/github/license/bygui86/multi-profile)
+
 [![BuildStatus](https://github.com/bygui86/multi-profile/workflows/build/badge.svg)](https://github.com/bygui86/multi-profile/actions)
+![LatestRelease](https://img.shields.io/github/v/release/bygui86/multi-profile)
+
+![LatestTag](https://img.shields.io/github/v/tag/bygui86/multi-profile)
+![LastCommit](https://img.shields.io/github/last-commit/bygui86/multi-profile)
+![Issues](https://img.shields.io/github/issues/bygui86/multi-profile)
+![PullRequests](https://img.shields.io/github/issues-pr/bygui86/multi-profile)
 
 Multi-profiling support package for Go.
 
@@ -101,3 +110,7 @@ You can call a function right after stopping the profiling. Use `CloserHook` fie
 I welcome pull requests, bug fixes and issue reports.
 
 To propose an extensive change, please discuss it first by opening an issue.
+
+## Thanks
+
+- [shields.io](https://shields.io) for providing badges

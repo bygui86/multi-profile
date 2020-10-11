@@ -2,14 +2,12 @@ name: build
 on:
   push:
     branches:
-      - '*'
+      - '**'
     tags-ignore:
-      - '*'
+      - '**'
   pull_request:
     branches:
-      - '*'
-    tags-ignore:
-      - '*'
+      - '**'
 env:
   GO111MODULE: "on"
 jobs:
