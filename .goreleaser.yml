@@ -25,11 +25,11 @@ builds:
 #  github:
 #  prerelease: auto
 
-#checksum:
-#  name_template: 'checksums.txt'
+checksum:
+  name_template: 'checksums.txt'
 
-#snapshot:
-#  name_template: "{{ .Tag }}-next"
+snapshot:
+  name_template: "{{ .Tag }}-next"
 
 changelog:
   sort: asc
