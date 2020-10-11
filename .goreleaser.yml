@@ -1,21 +1,27 @@
 # See documentation at http://goreleaser.com
+
 project_name: multi-profile
-before:
-  hooks:
-    - go mod download
-    - go generate ./...
+
 builds:
-  - skip: true
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+    skip: true
+
 archives:
   - replacements:
       linux: Linux
+
 checksum:
   name_template: 'checksums.txt'
+
 snapshot:
   name_template: "{{ .Tag }}-next"
+
 changelog:
   sort: asc
   filters:
     exclude:
-    - '^docs:'
-    - '^test:'
+      - '^docs:'
+      - '^test:'
