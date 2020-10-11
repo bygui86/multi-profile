@@ -13,10 +13,7 @@ env:
 jobs:
   build:
     name: build
-    strategy:
-      matrix:
-        os: [ ubuntu-latest, macos-latest ]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
       - name: Setup
         uses: actions/setup-go@v2

@@ -15,6 +15,8 @@ export GOPRIVATE=gitlab.com/swissblock
 
 # ACTIONS
 
+## codebase
+
 build :		## Build package
 	go build ./...
 
@@ -26,6 +28,11 @@ mod-tidy :		## Tidy go modules references
 
 test:		## Run all tests
 	go test -coverprofile=coverage.out -count=5 -race ./...
+
+## release
+
+simulate-release:		## Simulate a library release
+	goreleaser --snapshot --skip-publish --rm-dist
 
 release:		## Release library
 	goreleaser release --rm-dist
