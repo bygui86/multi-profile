@@ -553,11 +553,8 @@ func (p *Profile) prepareTempPath() error {
 // recovery avoids the whole application fails due to a profile issue
 func (p *Profile) recovery() {
 	msg := recover()
-
 	if msg != nil {
 		p.logf(warnLevel, "%s profiling panic situation recovered: %s", string(p.mode), msg)
-	} else {
-		p.logf(warnLevel, "%s profiling panic situation recovered", string(p.mode))
 	}
 }
 
