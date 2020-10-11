@@ -60,6 +60,9 @@ func main() {
 
 `(i)️ INFO` see [examples](examples/) folder for all available profiles and samples.
 
+`/!\ WARN` if not using `EnableInterruptHook` option (see below) ALWAYS remember to defer `Stop()` function, 
+otherwise the profile won't stop and flush to file properly.
+
 ## Options
 
 `(i)️️ INFO` see [examples](examples/) for all usage samples.
@@ -74,7 +77,7 @@ Use field `Path` and `UseTempPath` in the Config.
 
 You can enable an interruption hook that runs a new goroutine waiting for interruption signals (syscall.SIGTERM, 
 syscall.SIGINT and os.Interrupt). If one of those signals arrives, the profiling packages stop the Profile and flushes 
-results to file. 
+results to file. Enabling this option, you can avoid deferring Stop() function in the main.
 
 Use `EnableInterruptHook` field in the Config.
 
