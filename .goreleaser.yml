@@ -1,35 +1,15 @@
 # See documentation at http://goreleaser.com
 
-# release a golang library
-#   https://goreleaser.com/cookbooks/release-a-library/
-#   https://github.com/goreleaser/goreleaser/pull/1419
-#   https://github.com/goreleaser/goreleaser/discussions/1850#discussioncomment-94807
-
 project_name: multi-profile
 
 builds:
   - skip: true
 
-#builds:
-#  - env:
-#      - CGO_ENABLED=0
-#    goos:
-#      - linux
-#    skip: true
+checksum:
+  name_template: 'checksums.txt'
 
-#archives:
-#  - replacements:
-#      linux: Linux
-
-#release:
-#  github:
-#  prerelease: auto
-
-#checksum:
-#  name_template: 'checksums.txt'
-
-#snapshot:
-#  name_template: "{{ .Tag }}-next"
+snapshot:
+  name_template: "{{ .Tag }}-next"
 
 changelog:
   sort: asc
