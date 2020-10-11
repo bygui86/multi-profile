@@ -1,6 +1,6 @@
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/bygui86/multi-profile v1.2.0-beta h1:ennVnl27fgZukmaGOvuxEP0TAR3Uk/GWdXqPMAX/Hfc=
-github.com/bygui86/multi-profile v1.2.0-beta/go.mod h1:GnoWbqyB394arZj+HAcJ/pMaoCczsU0FmBMyUrUm7Og=
+github.com/bygui86/multi-profile v1.3.1 h1:3lRtOsmQCMsCI83P8fcRnJO5Kpe5E6sLjsrRl68BN90=
+github.com/bygui86/multi-profile v1.3.1/go.mod h1:GnoWbqyB394arZj+HAcJ/pMaoCczsU0FmBMyUrUm7Og=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/google/renameio v0.1.0/go.mod h1:KWCgfxg9yswjAJkECMjeO8J8rahYeXnNhOm40UhjYkI=
