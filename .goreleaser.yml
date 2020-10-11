@@ -2,12 +2,15 @@
 
 project_name: multi-profile
 
-builds:
-  - env:
-      - CGO_ENABLED=0
-    goos:
-      - linux
-    skip: true
+build:
+  skip: true
+
+#builds:
+#  - env:
+#      - CGO_ENABLED=0
+#    goos:
+#      - linux
+#    skip: true
 
 archives:
   - replacements:
