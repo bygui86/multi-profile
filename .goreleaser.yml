@@ -6,9 +6,6 @@
 
 project_name: multi-profile
 
-#build:
-#  skip: true
-
 builds:
   - skip: true
 
@@ -19,19 +16,19 @@ builds:
 #      - linux
 #    skip: true
 
-archives:
-  - replacements:
-      linux: Linux
+#archives:
+#  - replacements:
+#      linux: Linux
 
 #release:
 #  github:
 #  prerelease: auto
 
-checksum:
-  name_template: 'checksums.txt'
+#checksum:
+#  name_template: 'checksums.txt'
 
-snapshot:
-  name_template: "{{ .Tag }}-next"
+#snapshot:
+#  name_template: "{{ .Tag }}-next"
 
 changelog:
   sort: asc
