@@ -23,9 +23,9 @@ archives:
   - replacements:
       linux: Linux
 
-release:
-  github:
-  prerelease: auto
+#release:
+#  github:
+#  prerelease: auto
 
 checksum:
   name_template: 'checksums.txt'
