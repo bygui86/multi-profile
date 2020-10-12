@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/bygui86/multi-profile"
+	"github.com/bygui86/multi-profile/v2"
 )
 
 func main() {

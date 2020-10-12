@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/bygui86/multi-profile"
+	"github.com/bygui86/multi-profile/v2"
 
 	"github.com/bygui86/multi-profile/examples/custom-logger/logging"
 )
