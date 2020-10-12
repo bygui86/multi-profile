@@ -1,4 +1,4 @@
-module github.com/bygui86/multi-profile
+module github.com/bygui86/multi-profile/v2
 
 go 1.15
 

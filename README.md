@@ -33,7 +33,7 @@ For example:
 ```go
 package main
 
-import "github.com/bygui86/multi-profile"
+import "github.com/bygui86/multi-profile/v2"
 
 func main() {
     defer profile.CPUProfile(&profile.Config{}).Start().Stop()
@@ -47,7 +47,7 @@ Using profile specific method, you can create the kind of profiling you want giv
 ```go
 package main
 
-import "github.com/bygui86/multi-profile"
+import "github.com/bygui86/multi-profile/v2"
 
 func main() {
     defer profile.CPUProfile(&profile.Config{}).Start().Stop()

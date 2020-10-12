@@ -3,7 +3,6 @@ package profile_test
 import (
 	"bufio"
 	"bytes"
-	"io"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -61,21 +60,23 @@ type profileTest struct {
 type checkFn func(t *testing.T, stdout, stderr []byte, err error)
 
 // Stdout verifies that the given lines match the output from stdout
-func Stdout(lines ...string) checkFn {
+func Stdout(expectedLines ...string) checkFn {
 	return func(t *testing.T, stdout, stderr []byte, err error) {
-		r := bytes.NewReader(stdout)
-		if !validateOutput(r, lines) {
-			t.Errorf("stdout: expected '%s', actual '%s'", strings.Join(lines, ", "), stdout)
+		for _, expected := range expectedLines {
+			if !validateOutput(stdout, expected) {
+				t.Errorf("stdout: expected '%s', actual '%s'", expected, stdout)
+			}
 		}
 	}
 }
 
 // NotInStdout verifies that the given lines do not match the output from stdout
-func NotInStdout(lines ...string) checkFn {
+func NotInStdout(expectedLines ...string) checkFn {
 	return func(t *testing.T, stdout, stderr []byte, err error) {
-		r := bytes.NewReader(stdout)
-		if validateOutput(r, lines) {
-			t.Errorf("stdout: '%s' was not expected, but found in stdout '%s'", strings.Join(lines, ", "), stdout)
+		for _, expected := range expectedLines {
+			if validateOutput(stdout, expected) {
+				t.Errorf("stdout: '%s' was not expected, but found in stdout '%s'", expected, stdout)
+			}
 		}
 	}
 }
@@ -88,11 +89,12 @@ func NoStdout(t *testing.T, stdout, stderr []byte, err error) {
 }
 
 // Stderr verifies that the given lines match the output from stderr
-func Stderr(lines ...string) checkFn {
+func Stderr(expectedLines ...string) checkFn {
 	return func(t *testing.T, stdout, stderr []byte, err error) {
-		r := bytes.NewReader(stderr)
-		if !validateOutput(r, lines) {
-			t.Errorf("stderr: expected '%s', actual '%s'", strings.Join(lines, ", "), stderr)
+		for _, expected := range expectedLines {
+			if !validateOutput(stderr, expected) {
+				t.Errorf("stderr: expected '%s', actual '%s'", expected, stderr)
+			}
 		}
 	}
 }
@@ -118,21 +120,15 @@ func NoErr(t *testing.T, stdout, stderr []byte, err error) {
 	}
 }
 
-// validateOutput checks if the given slice of lines are among data from the given reader
-func validateOutput(reader io.Reader, expected []string) bool {
-	scanner := bufio.NewScanner(reader)
-	for _, line := range expected {
-		flag := true
-		for scanner.Scan() {
-			if strings.Contains(strings.ToLower(scanner.Text()), strings.ToLower(line)) {
-				return true
-			} else {
-				flag = false
-			}
+// validateOutput checks if the expected input line is among data from stdout/stderr
+func validateOutput(std []byte, expected string) bool {
+	scanner := bufio.NewScanner(bytes.NewReader(std))
+	for scanner.Scan() {
+		if strings.Contains(strings.ToLower(scanner.Text()), strings.ToLower(expected)) {
+			return true
 		}
-		return flag
 	}
-	return true
+	return false
 }
 
 /*

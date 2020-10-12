@@ -362,7 +362,7 @@ func (p *Profile) startThreadCreationMode() {
 
 	p.internalCloser = p.stopThreadCreationMode
 
-	p.logf(infoLevel, "Thread creation profiling enabled, file %s", p.filePath)
+	p.logf(infoLevel, "Thread profiling enabled, file %s", p.filePath)
 }
 
 // startGoroutineMode starts goroutine profiling

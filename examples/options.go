@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/bygui86/multi-profile"
+	"github.com/bygui86/multi-profile/v2"
 )
 
 // Example to write profile to default path (same as application)
