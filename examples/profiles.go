@@ -1,7 +1,7 @@
 package examples
 
 import (
-	"github.com/bygui86/multi-profile"
+	"github.com/bygui86/multi-profile/v2"
 )
 
 func OneLine() {

@@ -10,7 +10,7 @@ var profileTests = []profileTest{
 		code: `
 			package main
 			
-			import "github.com/bygui86/multi-profile"
+			import "github.com/bygui86/multi-profile/v2"
 			
 			func main() {
 				defer profile.CPUProfile(&profile.Config{}).Start().Stop()
@@ -28,14 +28,14 @@ var profileTests = []profileTest{
 		code: `
 			package main
 	
-			import "github.com/bygui86/multi-profile"
+			import "github.com/bygui86/multi-profile/v2"
 	
 			func main() {
 				defer profile.MemProfile(&profile.Config{}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
-			Stdout("memory profiling (heap) enabled", "memory profiling (heap) disabled"),
+			Stdout("memory profiling (heap) enabled", "memory profiling disabled"),
 			NotInStdout("panic situation recovered"),
 			NoStderr,
 			NoErr,
@@ -46,14 +46,14 @@ var profileTests = []profileTest{
 		code: `
 			package main
 	
-			import "github.com/bygui86/multi-profile"
+			import "github.com/bygui86/multi-profile/v2"
 	
 			func main() {
 				defer profile.MemProfile(&profile.Config{MemProfileType: profile.MemProfileAllocs}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
-			Stdout("memory profiling (allocs) enabled", "memory profiling (allocs) disabled"),
+			Stdout("memory profiling (allocs) enabled", "memory profiling disabled"),
 			NotInStdout("panic situation recovered"),
 			NoStderr,
 			NoErr,
@@ -64,14 +64,14 @@ var profileTests = []profileTest{
 		code: `
 			package main
 	
-			import "github.com/bygui86/multi-profile"
+			import "github.com/bygui86/multi-profile/v2"
 	
 			func main() {
 				defer profile.MemProfile(&profile.Config{MemProfileRate: 1024}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
-			Stdout("memory profiling (heap) enabled at rate 1024", "memory profiling (heap) disabled"),
+			Stdout("memory profiling (heap) enabled at rate 1024", "memory profiling disabled"),
 			NotInStdout("panic situation recovered"),
 			NoStderr,
 			NoErr,
@@ -82,7 +82,7 @@ var profileTests = []profileTest{
 		code: `
 			package main
 	
-			import "github.com/bygui86/multi-profile"
+			import "github.com/bygui86/multi-profile/v2"
 	
 			func main() {
 				defer profile.MutexProfile(&profile.Config{}).Start().Stop()
@@ -100,7 +100,7 @@ var profileTests = []profileTest{
 		code: `
 			package main
 	
-			import "github.com/bygui86/multi-profile"
+			import "github.com/bygui86/multi-profile/v2"
 	
 			func main() {
 				defer profile.BlockProfile(&profile.Config{}).Start().Stop()
@@ -118,7 +118,7 @@ var profileTests = []profileTest{
 		code: `
 			package main
 	
-			import "github.com/bygui86/multi-profile"
+			import "github.com/bygui86/multi-profile/v2"
 	
 			func main() {
 				defer profile.TraceProfile(&profile.Config{}).Start().Stop()
@@ -132,18 +132,18 @@ var profileTests = []profileTest{
 		},
 	},
 	{
-		name: "thread creation profile",
+		name: "thread profile",
 		code: `
 			package main
 	
-			import "github.com/bygui86/multi-profile"
+			import "github.com/bygui86/multi-profile/v2"
 	
 			func main() {
 				defer profile.ThreadCreationProfile(&profile.Config{}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
-			Stdout("thread creation profiling enabled", "thread creation profiling disabled"),
+			Stdout("thread profiling enabled", "thread profiling disabled"),
 			NotInStdout("panic situation recovered"),
 			NoStderr,
 			NoErr,
@@ -154,7 +154,7 @@ var profileTests = []profileTest{
 		code: `
 			package main
 	
-			import "github.com/bygui86/multi-profile"
+			import "github.com/bygui86/multi-profile/v2"
 	
 			func main() {
 				defer profile.GoroutineProfile(&profile.Config{}).Start().Stop()
@@ -172,7 +172,7 @@ var profileTests = []profileTest{
 		code: `
 			package main
 			
-			import "github.com/bygui86/multi-profile"
+			import "github.com/bygui86/multi-profile/v2"
 			
 			func main() {
 				defer profile.CPUProfile(&profile.Config{}).Start().Stop()
@@ -181,7 +181,7 @@ var profileTests = []profileTest{
 			`,
 		checks: []checkFn{
 			Stdout("cpu profiling enabled", "cpu profiling disabled",
-				"memory profiling (heap) enabled", "memory profiling (heap) disabled"),
+				"memory profiling (heap) enabled", "memory profiling disabled"),
 			NotInStdout("panic situation recovered"),
 			NoStderr,
 			NoErr,
@@ -192,7 +192,7 @@ var profileTests = []profileTest{
 		code: `
 			package main
 	
-			import "github.com/bygui86/multi-profile"
+			import "github.com/bygui86/multi-profile/v2"
 	
 			func main() {
 				defer profile.CPUProfile(&profile.Config{Path: "/private"}).Start().Stop()
@@ -211,7 +211,7 @@ var optionsTests = []profileTest{
 		code: `
 			package main
 	
-			import "github.com/bygui86/multi-profile"
+			import "github.com/bygui86/multi-profile/v2"
 	
 			func main() {
 				defer profile.CPUProfile(&profile.Config{Quiet: true}).Start().Stop()
@@ -230,7 +230,7 @@ var optionsTests = []profileTest{
 	
 			import (
 				"os"
-				"github.com/bygui86/multi-profile"
+				"github.com/bygui86/multi-profile/v2"
 			)
 	
 			func main() {
@@ -249,7 +249,7 @@ var optionsTests = []profileTest{
 		code: `
 			package main
 	
-			import "github.com/bygui86/multi-profile"
+			import "github.com/bygui86/multi-profile/v2"
 	
 			func main() {
 				defer profile.CPUProfile(&profile.Config{UseTempPath: true}).Start().Stop()
@@ -267,7 +267,7 @@ var optionsTests = []profileTest{
 		code: `
 			package main
 	
-			import "github.com/bygui86/multi-profile"
+			import "github.com/bygui86/multi-profile/v2"
 	
 			func main() {
 				defer profile.CPUProfile(&profile.Config{EnableInterruptHook: true}).Start().Stop()
@@ -287,7 +287,7 @@ var optionsTests = []profileTest{
 	
 			import (
 				"fmt"
-				"github.com/bygui86/multi-profile"
+				"github.com/bygui86/multi-profile/v2"
 			)
 	
 			func main() {
@@ -309,7 +309,7 @@ var optionsTests = []profileTest{
 		code: `
 			package main
 	
-			import "github.com/bygui86/multi-profile"
+			import "github.com/bygui86/multi-profile/v2"
 	
 			func main() {
 				defer profile.CPUProfile(&profile.Config{Path: "/private"}).Start().Stop()
@@ -327,7 +327,7 @@ var optionsTests = []profileTest{
 		code: `
 			package main
 	
-			import "github.com/bygui86/multi-profile"
+			import "github.com/bygui86/multi-profile/v2"
 	
 			func main() {
 				defer profile.CPUProfile(&profile.Config{Path: "/private", NoExit: true}).Start().Stop()
