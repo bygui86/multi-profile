@@ -200,7 +200,7 @@ var profileTests = []profileTest{
 			`,
 		checks: []checkFn{
 			Stdout("permission denied"),
-			Err,
+			NoErr,
 		},
 	},
 }
@@ -318,23 +318,22 @@ var optionsTests = []profileTest{
 		checks: []checkFn{
 			Stdout("permission denied"),
 			NotInStdout("panic situation recovered"),
-			Stderr("exit status"),
-			Err,
+			NoErr,
 		},
 	},
 	{
-		name: "no exit",
+		name: "panic if fail",
 		code: `
 			package main
 	
 			import "github.com/bygui86/multi-profile/v2"
 	
 			func main() {
-				defer profile.CPUProfile(&profile.Config{Path: "/private", NoExit: true}).Start().Stop()
+				defer profile.CPUProfile(&profile.Config{Path: "/private", PanicIfFail: true}).Start().Stop()
 			}
 			`,
 		checks: []checkFn{
-			Stdout("permission denied", "panic situation recovered"),
+			Stdout("permission denied"),
 			Err,
 		},
 	},

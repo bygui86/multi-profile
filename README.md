@@ -93,14 +93,9 @@ You can call a function right after stopping the profiling.
 
 Use `CloserHook` field in the Config.
 
-## Error codes
+### Panic in case of profile failure
 
-| Code | Description |
-| --- | --- |
-| 11 | path preparation failed |
-| 12 | file creation failed |
-| 13 | cpu profile start failed |
-| 14 | trace profile start failed |
+Per default the profile won't cause a panic in case of failure, it will simply log the error. In case you want to panic the whole application just set `PanicIfFail` to true in the Config.
 
 ## Contributing
 
@@ -110,4 +105,5 @@ To propose an extensive change, please discuss it first by opening an issue.
 
 ## Thanks
 
+- [pkg/profile](https://github.com/pkg/profile) for the base idea
 - [shields.io](https://shields.io) for providing badges
